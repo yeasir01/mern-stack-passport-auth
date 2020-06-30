@@ -16,15 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yeasir01/mern-stack-auth.git"
+    "url": "git+https://github.com/yeasir01/mern-stack-passport-auth.git"
   },
   "keywords": [],
   "author": "Yeasir Hugais",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yeasir01/mern-stack-auth/issues"
+    "url": "https://github.com/yeasir01/mern-stack-passport-auth/issues"
   },
-  "homepage": "https://github.com/yeasir01/mern-stack-auth#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",

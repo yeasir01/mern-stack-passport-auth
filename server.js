@@ -39,9 +39,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mern-pass-auth'
     console.log('There was an issue connecting to MongoDB')
 });
 
-app.get('*', (req, res) => {
+/* app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/client/build/index.html'));
-});
+}); */
 
 app.use("/api/auth", require("./routes/api/auth"));
 
