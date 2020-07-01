@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import HomePage from '../../pages/HomePage';
 import LoginPage from '../../pages/LoginPage';
 import RegisterPage from '../../pages/RegisterPage';
 import Dashboard from '../../pages/DashboardPage';
 import NotFoundPage from '../../pages/NotFoundPage';
-import {userContext} from '../../context/user';
+import { userContext } from '../../context/user';
 import PrivateRoute from '../../utils/PrivateRoute';
 import API from  '../../utils/API';
 import './global.css';
@@ -16,10 +16,9 @@ function App() {
     authenticated: false,
     userId: null,
     name: null
-  })
+  });
 
   const logout = () => {
-    
     API.logout()
     .then(res => {
       setUserState({
@@ -36,7 +35,7 @@ function App() {
         name: null
       })
     })
-  }
+  };
 
   return (
       <userContext.Provider value={{userState, setUserState, logout}}>
@@ -55,6 +54,6 @@ function App() {
         </userContext.Consumer>
       </userContext.Provider>
   );
-}
+};
 
 export default App;
