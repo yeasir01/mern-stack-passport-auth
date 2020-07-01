@@ -21,6 +21,7 @@ This project is open source (code contributions welcome) & intended for projects
 - Passport-Local
 - Bcrypt
 - Mongoose & MongoDB
+- Connect-Mongo
 
 ## Technologies (Client-Side)
 - React

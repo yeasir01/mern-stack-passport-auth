@@ -42,13 +42,13 @@ function App() {
         <userContext.Consumer>
           {(props) => (
             <BrowserRouter>
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/login" component={LoginPage} />
-              <Route exact path="/register" component={RegisterPage} />
-              <PrivateRoute path="/dashboard" component={Dashboard} />
-              <Route path="*" component={NotFoundPage} />
-            </Switch>
+              <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route exact path="/login" component={LoginPage} />
+                <Route exact path="/register" component={RegisterPage} />
+                <PrivateRoute path="/dashboard" component={Dashboard} />
+                <Route path="*" component={NotFoundPage} />
+              </Switch>
           </BrowserRouter>
           )}
         </userContext.Consumer>
