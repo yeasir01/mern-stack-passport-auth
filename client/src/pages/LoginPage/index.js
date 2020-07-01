@@ -55,7 +55,7 @@ const SignIn = () => {
       history.push("/dashboard")
     })
     .catch(err => {
-      console.log(err.response)
+      console.log(err)
       setMessage({type: "error", msg: "Wrong username or password!"})
     })
   }

@@ -38,11 +38,12 @@ function PrivateRoute({ component: Component, ...rest }) {
   return (
     <>
       { 
-      loading ? <Loader /> :
-        <Route {...rest} render={ props => (
-          userState.authenticated ? <Component {...props} /> : 
-          <Redirect to={{pathname: '/login', state: {from: props.location}}} />
-        )} />
+      loading ? <Loader /> : (
+          <Route {...rest} render={ props => (
+            userState.authenticated ? <Component {...props} /> : 
+            <Redirect to={{pathname: '/login', state: {from: props.location}}} />
+          )} />
+        )
       }
     </>
   );
