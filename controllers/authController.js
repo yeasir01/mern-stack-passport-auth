@@ -70,9 +70,7 @@ module.exports = {
        })
     },
     authenticate: (req, res) => {
-        console.log("req user", req.user)
-        console.log("is Auth", req.isAuthenticated())
-        
+
         if (req.isAuthenticated()) {
             let {firstName, lastName, id} = req.user;
             function capitalize(string) {

@@ -19,7 +19,6 @@ function PrivateRoute({ component: Component, ...rest }) {
         userId: id,
         name: user
         })
-        console.log(res)
         setLoading(false)
     })
     .catch(err => {
@@ -34,7 +33,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         setLoading(false)
     })
   },[])
-  console.log('userstate here', userState)
+
   return (
     <>
       { 
