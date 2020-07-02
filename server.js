@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path')
 const mongoose = require('mongoose');
 const session = require('express-session');
-const passport = require('./config/passport');
+const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
 
 const app = express();
