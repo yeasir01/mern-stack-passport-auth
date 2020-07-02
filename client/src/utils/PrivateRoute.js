@@ -13,26 +13,33 @@ function PrivateRoute({ component: Component, ...rest }) {
     API.authenticate()
     .then(res => {
         let { user, id } = res.data;
-
-        setUserState({
-        authenticated: true,
-        userId: id,
-        name: user
-        })
-        setLoading(false)
-    })
-    .catch(err => {
-        console.log(err)
         
+        setUserState({
+          authenticated: true,
+          userId: id,
+          name: user
+        })
+
+        loadingTimeout()
+    })
+    .catch(err => { 
         setUserState({
           authenticated: false,
           userId: null,
           name: null
         })
 
-        setLoading(false)
+        loadingTimeout()
+        console.log(err)
     })
   },[])
+  
+  const loadingTimeout = () => {
+    setTimeout(()=> {
+      setLoading(false)
+      clearTimeout(this)
+    }, 300)
+  }
 
   return (
     <>

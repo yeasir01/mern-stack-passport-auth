@@ -1,14 +1,13 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
 
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 module.exports = {
     login: (req, res) => {
         let {firstName, lastName, id} = req.user;
-        
-        function capitalize(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
         res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id })
     },
     logout: (req, res) => {
@@ -70,11 +69,8 @@ module.exports = {
        })
     },
     authenticate: (req, res) => {
-        if (req.user) {
+        if (req.isAuthenticated()) {
             let {firstName, lastName, id} = req.user;
-            function capitalize(string) {
-                return string.charAt(0).toUpperCase() + string.slice(1);
-            }
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id })
         } else {
             res.status(401).json({success: false, message: "Login required to access this content!"})
