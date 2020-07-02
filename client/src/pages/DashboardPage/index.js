@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from '../../components/Footer';
 import { userContext } from '../../context/user';
 
 const Dashboard = () => {
@@ -11,6 +12,7 @@ const Dashboard = () => {
             <h1>ID: {userState.userId}</h1>
             <button style={{marginRight:"10px"}}>Get Data</button>
             <button onClick={logout}>Logout</button>
+            <Footer />
         </div>
     )
 }

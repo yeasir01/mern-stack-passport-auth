@@ -34,7 +34,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         setLoading(false)
     })
   },[])
-  
+  console.log(userState)
   return (
     <>
       { 
