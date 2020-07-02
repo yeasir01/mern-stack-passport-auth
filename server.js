@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.enable('trust proxy');
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));
@@ -32,7 +33,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mern-pass-auth'
     console.log('There was an issue connecting to MongoDB')
 });
 
-app.enable('trust proxy');
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
