@@ -7,7 +7,7 @@ router.route('/')
     // @route  GET /api/auth
     // @desc   GET user data once authenticated
     // @access Private
-    .get(passport.authenticate('local'), AuthController.checkAuthState)
+    .get(AuthController.checkAuthState)
 
 router.route('/login')
     // @route  POST /api/auth/login
