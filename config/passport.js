@@ -34,14 +34,14 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
     db.User.findById({_id: id}, (err, user) => {
         
-        let resData = {
+        let response = {
             id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email
         }
 
-        done(err, resData);
+        done(err, response);
     });
 });
 
