@@ -69,6 +69,7 @@ module.exports = {
        })
     },
     checkAuthState: (req, res) => {
+        res.json('hello')
         if (req.isAuthenticated()) {
             let {firstName, lastName, id} = req.user;
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id })

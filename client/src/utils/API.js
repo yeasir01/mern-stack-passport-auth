@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+axios.defaults.withCredentials = true
+
 export default {
     login: (data) => {
         return axios.post("/api/auth/login", data)
