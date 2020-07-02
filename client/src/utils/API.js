@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default {
     login: (data) => {
-        return axios.post("/api/auth", data)
+        return axios.post("/api/auth/login", data)
     },
     logout: () => {
         return axios.get('/api/auth/logout')
@@ -10,7 +10,7 @@ export default {
     register: (data) => {
         return axios.post("/api/auth/register", data)
     },
-    authenticate: () => {
-        return axios.get('/api/auth', { withCredentials: true })
+    checkAuthState: () => {
+        return axios.get('/api/auth')
     }
 }

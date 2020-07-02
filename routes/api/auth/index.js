@@ -4,14 +4,16 @@ const passport = require('../../../config/passport');
 const AuthController = require('../../../controllers/authController');
 
 router.route('/')
-    // @route  POST /api/auth
-    // @desc   POST username & password to start a session
-    // @access Public {successRedirect: "/dashboard"}
-    .post(passport.authenticate('local'), AuthController.login)
     // @route  GET /api/auth
     // @desc   GET user data once authenticated
     // @access Private
-    .get(AuthController.authenticate)
+    .get(AuthController.checkAuthState)
+
+router.route('/login')
+    // @route  POST /api/auth/login
+    // @desc   POST username & password to start a session
+    // @access Public {successRedirect: "/dashboard"}
+    .post(passport.authenticate('local'), AuthController.login)
 
 router.route('/logout')
     // @route  GET /api/auth/logout

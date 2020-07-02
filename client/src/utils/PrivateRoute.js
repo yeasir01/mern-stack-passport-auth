@@ -10,7 +10,7 @@ function PrivateRoute({ component: Component, ...rest }) {
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(()=>{
-    API.authenticate()
+    API.checkAuthState()
     .then(res => {
         let { user, id } = res.data;
         
