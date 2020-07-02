@@ -1,6 +1,5 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
-const passport = require('passport');
 
 module.exports = {
     login: (req, res) => {
@@ -71,9 +70,7 @@ module.exports = {
        })
     },
     authenticate: (req, res) => {
-        console.log(req.isAuthenticated())
-
-        if (req.session.passport.user !== undefined) {
+        if (req.isAuthenticated()) {
             let {firstName, lastName, id} = req.user;
             function capitalize(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);

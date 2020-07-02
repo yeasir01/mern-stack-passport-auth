@@ -11,6 +11,6 @@ export default {
         return axios.post("/api/auth/register", data)
     },
     authenticate: () => {
-        return axios.get('/api/auth')
+        return axios.get('/api/auth', { withCredentials: true })
     }
 }
