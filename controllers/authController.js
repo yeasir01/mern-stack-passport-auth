@@ -70,12 +70,11 @@ module.exports = {
        })
     },
     authenticate: (req, res) => {
-        if (req.isAuthenticated()) {
+        if (req.user) {
             let {firstName, lastName, id} = req.user;
             function capitalize(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             }
-
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id })
         } else {
             res.status(401).json({success: false, message: "Login required to access this content!"})
