@@ -71,7 +71,7 @@ module.exports = {
     },
     authenticate: (req, res) => {
 
-        if (req.isAuthenticated()) {
+        if (req.user.id) {
             let {firstName, lastName, id} = req.user;
             function capitalize(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
