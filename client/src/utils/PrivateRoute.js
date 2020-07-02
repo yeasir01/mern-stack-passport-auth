@@ -19,7 +19,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         userId: id,
         name: user
         })
-
+        console.log('auth ran', user, id)
         setLoading(false)
     })
     .catch(err => {
