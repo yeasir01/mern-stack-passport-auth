@@ -72,9 +72,8 @@ module.exports = {
            res.status(500).json({success: false, message: "Internal server issue!"})
        })
     },
-    checkAuthState: (req, res, next) => {
+    checkAuthState: (req, res) => {
         if (req.isAuthenticated()) {
-            next();
             let {firstName, lastName, id} = req.user;
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
         } else {
