@@ -67,8 +67,7 @@ module.exports = {
                     })
                 })
             })
-       })
-       .catch( err => {
+       }).catch( err => {
            res.status(500).json({success: false, message: "Internal server issue!"})
        })
     },

@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('../../../config/passport');
 const AuthController = require('../../../controllers/authController');
 
-router.route('/validate')
+router.route('/')
     // @route  GET /api/auth
     // @desc   GET user data once authenticated
     // @access Private

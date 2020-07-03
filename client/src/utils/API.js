@@ -13,6 +13,6 @@ export default {
         return axios.post("/api/auth/register", data)
     },
     checkAuthState: () => {
-        return axios.get('/api/auth/validate')
+        return axios.get('/api/auth/')
     }
 }
