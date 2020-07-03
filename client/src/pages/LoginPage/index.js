@@ -45,7 +45,7 @@ const SignIn = () => {
     API.login(formData)
     .then(res => {
       let { user, id, isAuthenticated } = res.data;
-      
+      console.log("loginAPI", res)
       setUser({
         isAuthenticated: isAuthenticated,
         name: user,
