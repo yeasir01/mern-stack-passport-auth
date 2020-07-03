@@ -32,7 +32,7 @@ function PrivateRoute({ component: Component, ...rest }) {
       console.log("CheckUser B", err)
       loadingTimeout()
     })
-  },[])
+  },[setUser])
   
   const loadingTimeout = () => {
     setTimeout(() => {
