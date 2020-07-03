@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,14 +15,13 @@ import useStyles from './style';
 import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
 import AlertComponent from '../../components/AlertComponent';
-import { userContext } from '../../context/user';
 import API from '../../utils/API';
 
 const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
-
-  const { setUserState } = React.useContext(userContext);
+  
+  const { setUser } = useContext(AuthContext);
 
   const [message, setMessage] = useState({
     type: null,
@@ -44,12 +44,12 @@ const SignIn = () => {
     
     API.login(formData)
     .then(res => {
-      let { user, id } = res.data;
+      let { user, id, isAuthenticated } = res.data;
       
-      setUserState({
-        authenticated: true,
-        userId: id,
-        name: user
+      setUser({
+        isAuthenticated: isAuthenticated,
+        name: user,
+        id: id
       })
 
       history.push("/dashboard")

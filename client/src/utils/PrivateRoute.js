@@ -1,42 +1,42 @@
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { userContext } from '../context/user';
+import { AuthContext } from '../utils/AuthContext';
 import Loader from '../components/Loader';
 import API from './API';
 
 function PrivateRoute({ component: Component, ...rest }) {
 
-  const { userState, setUserState } = React.useContext(userContext);
-  const [loading, setLoading] = React.useState(true)
+  const { user, setUser } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true)
 
-  React.useEffect(()=>{
+  useEffect(() => {
     API.checkAuthState()
     .then(res => {
-        let { user, id } = res.data;
+        let { user, id, isAuthenticated } = res.data;
         
-        setUserState({
-          authenticated: true,
-          userId: id,
-          name: user
+        setUser({
+          isAuthenticated: isAuthenticated,
+          name: user,
+          id: id
         })
-        console.log("AUth",res)
+        
         loadingTimeout()
     })
-    .catch(err => { 
-        setUserState({
-          authenticated: false,
-          userId: null,
-          name: null
-        })
+    .catch( err => { 
+      
+      setUser({
+        isAuthenticated: false,
+        name: null,
+        id: null
+      })
 
-        loadingTimeout()
-        console.log(err)
+      loadingTimeout()
     })
   },[])
   
   const loadingTimeout = () => {
-    setTimeout(()=> {
-      setLoading(false)
+    setTimeout(() => {
+      setIsLoading(false)
       clearTimeout(this)
     }, 250)
   }
@@ -44,9 +44,9 @@ function PrivateRoute({ component: Component, ...rest }) {
   return (
     <>
       { 
-      loading ? <Loader /> : (
+      isLoading ? <Loader /> : (
           <Route {...rest} render={ props => (
-            userState.authenticated ? <Component {...props} /> : 
+            user.isAuthenticated ? <Component {...props} /> : 
             <Redirect to={{pathname: '/login', state: {from: props.location}}} />
           )} />
         )

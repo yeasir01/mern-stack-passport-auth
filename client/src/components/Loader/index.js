@@ -4,7 +4,12 @@ import useStyles from './style';
 
 const Loader = () =>{
     const classes = useStyles();
-    return <div className={classes.progress}><CircularProgress color="secondary" /></div>
+
+    return (
+        <div className={classes.progress}>
+            <CircularProgress color="secondary" />
+        </div>
+    )
 }
 
 export default Loader;

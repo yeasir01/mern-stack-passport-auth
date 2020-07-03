@@ -12,8 +12,12 @@ function checkEmail(email){
 
 module.exports = {
     login: (req, res) => {
-        let {firstName, lastName, id} = req.user;
-        res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id })
+        if (req.isAuthenticated()){
+            let {firstName, lastName, id} = req.user;
+            res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
+        } else {
+            res.status(401).json({success: false, message: "unauthorized!"})
+        }
     },
     logout: (req, res) => {
         if (req.isAuthenticated()) {
@@ -71,7 +75,7 @@ module.exports = {
     checkAuthState: (req, res) => {
         if (req.isAuthenticated()) {
             let {firstName, lastName, id} = req.user;
-            res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id })
+            res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
         } else {
             res.status(401).json({success: false, message: "Login required to access this content!"})
         }

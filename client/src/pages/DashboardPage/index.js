@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
 import Footer from '../../components/Footer';
-import { userContext } from '../../context/user';
 
 const Dashboard = () => {
 
-    const { userState, logout } = React.useContext(userContext);
+    const { user, logout } = useContext(AuthContext);
 
-    return(
+    return (
         <div>
-            <h1>Welcome {userState.name}!</h1>
-            <h1>ID: {userState.userId}</h1>
+            <h1>Welcome {user.name}!</h1>
+            <h1>ID: {user.id}</h1>
             <button style={{marginRight:"10px"}}>Get Data</button>
             <button onClick={logout}>Logout</button>
             <Footer />

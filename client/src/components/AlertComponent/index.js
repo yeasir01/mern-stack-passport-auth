@@ -3,6 +3,7 @@ import Alert from '@material-ui/lab/Alert';
 import useStyles from './style';
 
 const AlertComponent= (props) => {
+  
   const {type, message} = props;
   const classes = useStyles();
 
