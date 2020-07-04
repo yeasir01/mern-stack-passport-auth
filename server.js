@@ -8,9 +8,11 @@ const MongoStore = require('connect-mongo')(session);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-let logger = require('morgan');
+if (process.env.NODE_ENV === 'development') {
+    let logger = require('morgan');
     require('dotenv').config();
     app.use(logger('dev'));
+}
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -41,21 +43,12 @@ app.use(passport.session());
 
 app.use("/api/auth", require("./routes/api/auth"));
 
-app.use(express.static("client/build"));
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-})
-
-/* if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));
+
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-    })
-} else {
-    let logger = require('morgan');
-    require('dotenv').config();
-    app.use(logger('dev'));
+    });
 };
- */
+
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}!`));
