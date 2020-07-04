@@ -12,9 +12,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.enable('trust proxy');
 
+app.use("/api/auth", require("./routes/api/auth"));
+
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"));
-    app.get('/*', (req, res) => {
+    app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
     })
 } else {
@@ -46,7 +48,5 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use("/api/auth", require("./routes/api/auth"));
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}!`));
