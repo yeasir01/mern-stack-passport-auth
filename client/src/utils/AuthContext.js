@@ -11,8 +11,6 @@ export default ({children}) => {
         id: null
     });
 
-    const [errors, setErrors] = useState([])
-
     const logout = () => {
         API.logout()
         .then( res => {
