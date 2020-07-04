@@ -8,8 +8,8 @@ This project is open source (code contributions welcome) & intended for projects
 
 ## Project Goals
 1) Security
-2) Small footprint (minimal dependencies)
-2) Use all functional based components & Hooks
+2) Small footprint (w/minimal dependencies)
+2) Use all functional based Components & Hooks
 3) Modern ES6 Syntax
 4) No Redux (due to overhead)
 5) Reduce or eliminate all unnecessary re-renders
