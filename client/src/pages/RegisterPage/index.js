@@ -43,13 +43,11 @@ const Register = () => {
     
     API.register(formData)
     .then(res => {
-      let msg = res.data.message;
-      setMessage({type:"success", msg: msg})
+      setMessage({type:"success", msg: res.data.message})
       clearForm()
     })
     .catch(err => {
-      let msg = err.response.data.message;
-      setMessage({type:"error", msg: msg})
+      setMessage({type:"error", msg: err.response.data.message})
     })
   }
 

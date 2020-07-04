@@ -44,8 +44,9 @@ const SignIn = () => {
     
     API.login(formData)
     .then(res => {
+
       let { user, id, isAuthenticated } = res.data;
-      console.log("loginAPI", res)
+      
       setUser({
         isAuthenticated: isAuthenticated,
         name: user,
@@ -55,8 +56,13 @@ const SignIn = () => {
       history.push("/dashboard")
     })
     .catch(err => {
-      console.log(err)
-      setMessage({type: "error", msg: "Wrong username or password!"})
+      if (err.response.status === 401){
+        setMessage({type: "error", msg: "Incorrect username or password!"})
+      } else if (err.response.status === 500) {
+        setMessage({type: "error", msg: "Internal server issue!"})
+      } else {
+        setMessage({type: "error", msg: "Oops, somthing went wrong!"})
+      }
     })
   }
 

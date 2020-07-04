@@ -11,7 +11,7 @@ router.route('/')
 
 router.route('/login')
     // @route  POST /api/auth/login
-    // @desc   POST username & password to start a session
+    // @desc   POST username & password & start a session
     // @access Public {successRedirect: "/dashboard"}
     .post(passport.authenticate('local'), AuthController.login)
 
