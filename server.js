@@ -8,7 +8,7 @@ const MongoStore = require('connect-mongo')(session);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
     let logger = require('morgan');
     require('dotenv').config();
     app.use(logger('dev'));
