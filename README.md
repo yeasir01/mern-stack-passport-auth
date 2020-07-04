@@ -1,5 +1,7 @@
 # :closed_lock_with_key: MERN Stack Passport Auth Boilerplate
 
+[![build status](https://img.shields.io/travis/axios/axios/master.svg?style=flat-square)](https://travis-ci.org/axios/axios)
+
 ## About This Project
 
 This is boilerplate code for a MERN stack authentication system using PasspportJS. The intent of this project is to create an easy to use performant login system that can be utilized for member based apps. 
