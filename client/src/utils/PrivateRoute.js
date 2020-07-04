@@ -19,7 +19,7 @@ function PrivateRoute({ component: Component, ...rest }) {
           name: user,
           id: id
         })
-        console.log("CheckUser G", res)
+
         loadingTimeout()
     })
     .catch( err => { 
@@ -29,7 +29,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         name: null,
         id: null
       })
-      console.log("CheckUser B", err)
+
       loadingTimeout()
     })
   },[setUser])
@@ -38,7 +38,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     setTimeout(() => {
       setIsLoading(false)
       clearTimeout(this)
-    }, 250)
+    }, 100)
   }
 
   return (
