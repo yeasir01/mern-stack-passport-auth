@@ -23,54 +23,79 @@ const SignIn = () => {
   
   const { setUser } = useContext(AuthContext);
 
-  const [message, setMessage] = useState({
+  const [alert, setAlert] = useState({
     type: null,
     msg: null
   })
-  
+
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   })
+
+  const [validation, setvalidation] = useState({
+    usernameError: null,
+    passwordError: null
+  })
+
+  const validationCheck = () => {
+    if (formData.username === "") {
+      setvalidation({...validation, usernameError: "Username cannot be blank"})
+      return false
+    }
+
+    if (formData.password === "") {
+      setvalidation({...validation, passwordError: "Password cannot be blank"})
+      return false
+    }
+
+    return true
+  }
   
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    clearMsg()
+    clearAlert()
   }
   
   const handleSubmit = (event) => {
     event.preventDefault()
     
-    API.login(formData)
-    .then(res => {
-
-      let { user, id, isAuthenticated } = res.data;
-      
-      setUser({
-        isAuthenticated: isAuthenticated,
-        name: user,
-        id: id
+    let valid = validationCheck()
+    
+    if (valid) {
+      API.login(formData)
+      .then(res => {
+  
+        let { user, id, isAuthenticated } = res.data;
+        
+        setUser({
+          isAuthenticated: isAuthenticated,
+          name: user,
+          id: id
+        })
+  
+        history.push("/dashboard")
       })
-
-      history.push("/dashboard")
-    })
-    .catch(err => {
-      if (err.response.status === 401){
-        setMessage({type: "error", msg: "Incorrect username or password!"})
-      } else if (err.response.status === 500) {
-        setMessage({type: "error", msg: "Internal server issue!"})
-      } else {
-        setMessage({type: "error", msg: "Oops, somthing went wrong!"})
-      }
-    })
+      .catch(err => {
+        console.log(err.response)
+          setAlert({type: "error", msg: "Oops, somthing went wrong!"})
+      })
+    }
   }
 
-  const clearMsg = () => {
-    if (message.type !== null || message.msg !== null) {
-      setMessage({
+  const clearAlert = () => {
+    if (alert.type !== null || alert.msg !== null) {
+      setAlert({
         type: null,
         msg: null
+      })
+    }
+
+    if (validation !== null){
+      setvalidation({
+        usernameError: null,
+        passwordError: null
       })
     }
   }
@@ -85,9 +110,11 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        {message.type ? <AlertComponent type={message.type} message={message.msg}/> : null}
+        {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
+            error = {validation.usernameError}
+            helperText={validation.usernameError}
             variant="outlined"
             margin="normal"
             required
@@ -101,6 +128,8 @@ const SignIn = () => {
             value={formData.username}
           />
           <TextField
+            error = {validation.passwordError}
+            helperText={validation.passwordError}
             variant="outlined"
             margin="normal"
             required

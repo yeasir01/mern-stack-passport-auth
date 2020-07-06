@@ -19,9 +19,17 @@ import API from '../../utils/API';
 const Register = () => {
   const classes = useStyles();
 
-  const [message, setMessage] = useState({
+  const [alert, setAlert] = useState({
     type: null,
     msg: null
+  })
+
+  const [validation, setvalidation] = useState({
+    firstNameError: null,
+    lastNameError: null,
+    emailError: null,
+    usernameError: null,
+    passwordError: null
   })
   
   const [formData, setFormData] = useState({
@@ -31,24 +39,62 @@ const Register = () => {
     username: '',
     password: ''
   })
+
+  const validationCheck = () => {
+    if (formData.firstName === "") {
+      setvalidation({...validation, firstNameError: "First Name cannot be blank"})
+      return false
+    }
+    
+    if (formData.lastName === "") {
+      setvalidation({...validation, lastNameError: "Last Name cannot be blank"})
+      return false
+    }
+
+    if (formData.email === "") {
+      setvalidation({...validation, emailError: "Email cannot be blank"})
+      return false
+    }
+
+    if (formData.username === "") {
+      setvalidation({...validation, usernameError: "Username cannot be blank"})
+      return false
+    }
+
+    if (formData.password === "") {
+      setvalidation({...validation, passwordError: "Password cannot be blank"})
+      return false
+    }
+
+    if (formData.password.length < 6) {
+      setvalidation({...validation, passwordError: "Password must be 6 characters or longer"})
+      return false
+    }
+
+    return true
+  }
   
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    clearMsg()
+    clearAlert()
   }
   
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    let valid = validationCheck()
     
-    API.register(formData)
-    .then(res => {
-      setMessage({type:"success", msg: res.data.message})
-      clearForm()
-    })
-    .catch(err => {
-      setMessage({type:"error", msg: err.response.data.message})
-    })
+    if (valid) {
+      API.register(formData)
+      .then(res => {
+        setAlert({type:"success", msg: res.data.message})
+        clearForm()
+      })
+      .catch(err => {
+        setAlert({type:"error", msg: err.response.data.message})
+      })
+    }
   }
 
   const clearForm = () => {
@@ -61,11 +107,21 @@ const Register = () => {
     })
   }
 
-  const clearMsg = () => {
-    if (message.type !== null || message.msg !== null) {
-      setMessage({
+  const clearAlert = () => {
+    if (alert.type !== null || alert.msg !== null) {
+      setAlert({
         type: null,
         msg: null
+      })
+    }
+
+    if (validation !== null){
+      setvalidation({
+        firstNameError: null,
+        lastNameError: null,
+        emailError: null,
+        usernameError: null,
+        passwordError: null
       })
     }
   }
@@ -80,11 +136,13 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        {message.type ? <AlertComponent type={message.type} message={message.msg}/> : null}
+        {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                error = {validation.firstNameError}
+                helperText={validation.firstNameError}
                 autoComplete="fname"
                 variant="outlined"
                 required
@@ -99,6 +157,8 @@ const Register = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                error = {validation.lastNameError}
+                helperText={validation.lastNameError}
                 variant="outlined"
                 required
                 fullWidth
@@ -112,6 +172,8 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error = {validation.emailError}
+                helperText={validation.emailError}
                 variant="outlined"
                 required
                 fullWidth
@@ -125,6 +187,8 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error = {validation.usernameError}
+                helperText={validation.usernameError}
                 variant="outlined"
                 required
                 fullWidth
@@ -138,6 +202,8 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error = {validation.passwordError}
+                helperText={validation.passwordError}
                 variant="outlined"
                 required
                 fullWidth

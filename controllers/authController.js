@@ -12,8 +12,8 @@ function checkEmail(email){
 
 module.exports = {
     login: (req, res) => {
-        if (req.isAuthenticated()){
-            let {firstName, lastName, id} = req.user;
+        if (req.isAuthenticated()) {
+            let { firstName, lastName, id } = req.user;
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
         } else {
             res.status(401).json({success: false, message: "Incorrect Username or Password!"})
@@ -28,13 +28,13 @@ module.exports = {
         }
     },
     register: (req, res) => {
-       let {username, password, firstName, lastName, email} = req.body;
+       let { username, password, firstName, lastName, email } = req.body;
 
        if (!username || !password || !firstName || !lastName || !email) {
            return res.status(400).json({ success: false, message: "Please Complete All Required Fields!" })
        }
 
-       if (password.length < 7) {
+       if (password.length < 6) {
            return res.status(400).json({ success: false, message: "Password Must Be Greater Than 6 Characters!" })
        }
        
