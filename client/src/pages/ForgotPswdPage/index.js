@@ -5,8 +5,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -53,12 +51,7 @@ const SignIn = () => {
       setvalidation({...validation, emailError: "Please enter a valid email address"})
       return false
     }
-
-    if (formData.password === "") {
-      setvalidation({...validation, passwordError: "Password cannot be blank"})
-      return false
-    }
-
+    
     return true
   }
   
@@ -89,7 +82,7 @@ const SignIn = () => {
       })
       .catch(err => {
         console.log(err.response)
-          setAlert({type: "error", msg: err.response.data})
+          setAlert({type: "error", msg: "Oops, somthing went wrong!"})
       })
     }
   }
@@ -118,7 +111,10 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Password Reset
+        </Typography>
+        <Typography component="h1" variant="body2" className={classes.text}>
+        Enter your email that you used to register. We'll send you an email with a link to reset your password.
         </Typography>
         {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
@@ -137,25 +133,6 @@ const SignIn = () => {
             onChange={handleChange}
             value={formData.email}
           />
-          <TextField
-            error = {validation.passwordError}
-            helperText={validation.passwordError}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={handleChange}
-            value={formData.password}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -167,13 +144,13 @@ const SignIn = () => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/forgot" variant="body2">
-                Forgot password?
+              <Link to="/" variant="body2">
+                Back Home 
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link to="/login" variant="body2">
+              Remember your password?
               </Link>
             </Grid>
           </Grid>

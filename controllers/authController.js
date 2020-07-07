@@ -1,12 +1,12 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
 
-function capitalize(string) {
+const capitalize = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function checkEmail(email){
-    let regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+const checkEmail = email => {
+    let regex = /^\S+@\S+\.\S+$/;
     return regex.test(email)
 }
 
@@ -16,43 +16,45 @@ module.exports = {
             let { firstName, lastName, id } = req.user;
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
         } else {
-            res.status(401).json({success: false, message: "Incorrect Username or Password!"})
+            res.status(401).json({success: false, message: "Incorrect email or password"})
         }
     },
     logout: (req, res) => {
         if (req.isAuthenticated()) {
             req.logout()
-            res.status(200).json({ success: true, message: "Successfully Logged Out!" })
+            res.status(200).json({ success: true, message: "Successfully logged out" })
         } else {
-            res.status(400).json({ success: false, message: "No Active Sessions" })
+            res.status(400).json({ success: false, message: "No active sessions" })
         }
     },
     register: (req, res) => {
-       let { username, password, firstName, lastName, email } = req.body;
+       let { email, password, firstName, lastName } = req.body;
 
-       if (!username || !password || !firstName || !lastName || !email) {
-           return res.status(400).json({ success: false, message: "Please Complete All Required Fields!" })
+       
+
+       if (!email || !password || !firstName || !lastName) {
+           return res.status(400).json({ success: false, message: "Please complete all required fields" })
        }
 
        if (password.length < 6) {
-           return res.status(400).json({ success: false, message: "Password Must Be Greater Than 6 Characters!" })
+           return res.status(400).json({ success: false, message: "Password must be greater than 6 characters" })
        }
        
        if (!checkEmail(email)) {
-           return res.status(400).json({ success: false, message: "Please Enter A Valid Email" })
+           return res.status(400).json({ success: false, message: "Please enter a valid email" })
        }
 
-       db.User.findOne({ username: username })
+       db.User.findOne({ email: email })
        .then( user => {
-
-           if (user) return res.status(400).json({ success: false, message: "Username Already Exists!" })
+        
+           if (user) return res.status(400).json({ success: false, message: "That email already exists, please choose another" })
 
            let newUser = new db.User({
-               username,
+               email,
                password,
                ...req.body
            })
-           
+
            bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash( newUser.password , salt, (err, hash) => {
                     if (err) throw err;
@@ -60,16 +62,16 @@ module.exports = {
                     
                     newUser.save()
                     .then(() => {
-                        res.status(201).json({success: true, message: "User Successfully Created!"})
+                        res.status(201).json({success: true, message: "User successfully created!"})
                     })
                     .catch( err => {
-                        res.status(500).json({success: false, message: "Server Issue: Unable To Create User!"})
+                        res.status(500).json({success: false, message: "Server Issue: Unable to create user!"})
                     })
                 })
             })
        }).catch( err => {
-           res.status(500).json({success: false, message: "Internal Server Issue!"})
-       })
+           res.status(500).json({success: false, message: "Internal server issue!"})
+            })
     },
     checkAuthState: (req, res) => {
         if (req.isAuthenticated()) {

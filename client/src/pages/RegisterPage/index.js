@@ -28,7 +28,6 @@ const Register = () => {
     firstNameError: null,
     lastNameError: null,
     emailError: null,
-    usernameError: null,
     passwordError: null
   })
   
@@ -36,9 +35,13 @@ const Register = () => {
     firstName: '',
     lastName: '',
     email: '',
-    username: '',
     password: ''
   })
+
+  const checkEmail = email => {
+    let regex = /^\S+@\S+\.\S+$/;
+    return regex.test(email)
+  }
 
   const validationCheck = () => {
     if (formData.firstName === "") {
@@ -56,8 +59,8 @@ const Register = () => {
       return false
     }
 
-    if (formData.username === "") {
-      setvalidation({...validation, usernameError: "Username cannot be blank"})
+    if (!checkEmail(formData.email)) {
+      setvalidation({...validation, emailError: "Please enter a valid email address"})
       return false
     }
 
@@ -102,7 +105,6 @@ const Register = () => {
       firstName: '',
       lastName: '',
       email: '',
-      username: '',
       password: ''
     })
   }
@@ -120,7 +122,6 @@ const Register = () => {
         firstNameError: null,
         lastNameError: null,
         emailError: null,
-        usernameError: null,
         passwordError: null
       })
     }
@@ -183,21 +184,6 @@ const Register = () => {
                 autoComplete="email"
                 onChange={handleChange}
                 value={formData.email}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error = {validation.usernameError}
-                helperText={validation.usernameError}
-                variant="outlined"
-                required
-                fullWidth
-                id="username"
-                label="User Name"
-                name="username"
-                autoComplete="username"
-                onChange={handleChange}
-                value={formData.username}
               />
             </Grid>
             <Grid item xs={12}>
