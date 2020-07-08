@@ -35,6 +35,8 @@ This project is open source (code contributions welcome) & intended for projects
 
 ```
 SESSION_SECRET = yourCustomSuperSecertPassPhraseHere
+EMAIL_USER = yourEmailHere
+EMAIL_PASSWORD = yourEmailPasswordHere
 ```
 
 Start by installing front and backend dependencies. While in the root directory, run the following command:
