@@ -21,7 +21,8 @@ app.enable('trust proxy');
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mern-pass-auth', {
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }).then(() => {
     console.log('Mongoose has sucessfully connected to MongoDB!')
 }).catch(err => {

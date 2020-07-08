@@ -22,6 +22,12 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         trim: true
+    },
+    resetPassToken: {
+        type: String,
+    },
+    tokenExpiration: {
+        type: Date
     }
 },
 {

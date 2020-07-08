@@ -14,5 +14,8 @@ export default {
     },
     checkAuthState: () => {
         return axios.get('/api/auth/')
+    },
+    forgotPassword: (data) => {
+        return axios.post('/api/auth/forgot', data)
     }
 }

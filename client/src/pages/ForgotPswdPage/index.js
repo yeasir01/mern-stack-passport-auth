@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../../utils/AuthContext';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,9 +16,6 @@ import API from '../../utils/API';
 
 const SignIn = () => {
   const classes = useStyles();
-  const history = useHistory();
-  
-  const { setUser } = useContext(AuthContext);
 
   const [alert, setAlert] = useState({
     type: null,
@@ -27,13 +23,11 @@ const SignIn = () => {
   })
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: ''
   })
 
   const [validation, setvalidation] = useState({
-    emailError: null,
-    passwordError: null
+    emailError: null
   })
 
   const checkEmail = email => {
@@ -67,22 +61,19 @@ const SignIn = () => {
     let valid = validationCheck()
     
     if (valid) {
-      API.login(formData)
-      .then(res => {
-  
-        let { user, id, isAuthenticated } = res.data;
-        
-        setUser({
-          isAuthenticated: isAuthenticated,
-          name: user,
-          id: id
-        })
-  
-        history.push("/dashboard")
+      API.forgotPassword(formData)
+      .then( res => {
+        setAlert({type: "success", msg: res.data.message})
+        setFormData({email: ''})
       })
-      .catch(err => {
-        console.log(err.response)
-          setAlert({type: "error", msg: "Oops, somthing went wrong!"})
+      .catch( err => {
+        let data = err.response.data;
+        
+        if ( data ) {
+          setAlert({type: "error", msg: data.message})
+        } else {
+          setAlert({type: "error", msg: "Oops, something went wrong!"})
+        }
       })
     }
   }
@@ -97,8 +88,7 @@ const SignIn = () => {
 
     if (validation !== null){
       setvalidation({
-        emailError: null,
-        passwordError: null
+        emailError: null
       })
     }
   }

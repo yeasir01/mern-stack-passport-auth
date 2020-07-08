@@ -27,4 +27,10 @@ router.route('/register')
     // @access Public
     .post(AuthController.register)
 
+router.route('/forgot')
+    // @route  POST /api/auth/forgot
+    // @desc   POST route to send a temp password
+    // @access Public
+    .post(AuthController.forgotPassword)
+
 module.exports = router;

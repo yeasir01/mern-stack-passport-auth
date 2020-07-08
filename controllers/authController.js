@@ -1,5 +1,7 @@
 const db = require('../models');
+const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const { sendMail } = require('../config/nodeMailer')
 
 const capitalize = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -29,8 +31,6 @@ module.exports = {
     },
     register: (req, res) => {
        let { email, password, firstName, lastName } = req.body;
-
-       
 
        if (!email || !password || !firstName || !lastName) {
            return res.status(400).json({ success: false, message: "Please complete all required fields" })
@@ -69,9 +69,10 @@ module.exports = {
                     })
                 })
             })
-       }).catch( err => {
-           res.status(500).json({success: false, message: "Internal server issue!"})
-            })
+       })
+        .catch( err => {
+            res.status(500).json({success: false, message: "Internal server issue!"})
+        })
     },
     checkAuthState: (req, res) => {
         if (req.isAuthenticated()) {
@@ -80,5 +81,28 @@ module.exports = {
         } else {
             res.status(401).json({success: false, message: "Login Required!"})
         }
+    },
+    forgotPassword: (req, res) => {
+        let { email } = req.body;
+        let token = crypto.randomBytes(40).toString('hex');
+        let expiration = Date.now() + (1000 * 60 * 15);
+        
+        db.User.findOne({ email: email })
+        .then( user => {
+
+            if (!user) {
+                res.status(422).json({success: false, message: "Email was not found!"})
+            } else {
+                db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
+                .then( ({resetPassToken, email}) => {
+                    sendMail(email, resetPassToken)
+                    res.status(200).json({success: true, message: "Check your email, link will expire in 15 min!"})
+                })
+            }
+            
+        }).catch( err => {
+            res.status(401).json({success: false, message: "Server is unable to process your request at this time!"})
+        })
+        
     }
 }
