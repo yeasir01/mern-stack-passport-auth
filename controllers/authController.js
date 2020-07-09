@@ -91,7 +91,7 @@ module.exports = {
         .then( user => {
 
             if (!user) {
-                res.status(422).json({success: false, message: "Email was not found!"})
+                res.status(422).json({success: false, message: "User with this email was not found!"})
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
                 .then( ({resetPassToken, email}) => {
@@ -101,8 +101,29 @@ module.exports = {
             }
             
         }).catch( err => {
-            res.status(401).json({success: false, message: "Server is unable to process your request at this time!"})
+            res.status(400).json({success: false, message: "Server is unable to process your request at this time!"})
         })
         
+    },
+    resetPassword: (req, res) => {
+        let { token, password } = req.body;
+
+        db.User.findOne({resetPassToken: token})
+        .then( user => {
+            
+            if (!user) {
+                res.status(422).json({success: false, message: "This password reset link is invalid!"})
+            } else if (user.tokenExpiration < Date.now()) {
+                res.status(422).json({success: false, message: "This reset password link has expired!"})
+            } else {
+                db.User.findOneAndUpdate({_id: user._id}, {$set:{password: password}, $unset:{resetPassToken: "", tokenExpiration: ""}})
+                .then(() => {
+                    res.status(200).json({success: true, message: "Password has been sucessfully changed!"})
+                })
+            }
+            
+        }).catch( err => {
+            res.status(400).json({success: false, message: "Server is unable to process your request at this time!"})
+        })
     }
 }

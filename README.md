@@ -2,17 +2,18 @@
 
 ## About This Project
 
-This is boilerplate code for a MERN stack authentication system using PasspportJS. The intent of this project is to create an easy to use performant login system that can be utilized for member based apps. 
+This is boilerplate code for a MERN stack authentication system using PasspportJS. The intent of this project is to create an easy to use, performant login system that can be utilized for any member based web applcation system.
 
-This project is open source (code contributions welcome) & intended for projects that do not require redux. It uses React's built in Context API for managing auth state.
+This project is open source (code contributions welcome). The intended is for projects that do not require redux. It uses React's built in Context API for managing auth state.
 
 ## Project Goals
 1) Security
-2) Small footprint (w/minimal dependencies)
-2) Use all functional based Components & Hooks
-3) Modern ES6 Syntax
-4) No Redux (due to overhead)
-5) Reduce or eliminate all unnecessary re-renders
+2) Maximum flexibility
+3) Small footprint w/minimal dependencies
+4) Use all modern functional based components & hooks
+5) Modern JS ES6 Syntax
+6) No Redux (due to overhead)
+7) Reduce or eliminate all unnecessary re-renders
 
 ## Technologies (Server-Side)
 - Express
@@ -22,6 +23,7 @@ This project is open source (code contributions welcome) & intended for projects
 - Bcrypt
 - Mongoose & MongoDB
 - Connect-Mongo
+- Nodemailer
 
 ## Technologies (Client-Side)
 - React

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './style';
 import Container from '@material-ui/core/Container';
@@ -14,8 +14,9 @@ import Footer from '../../components/Footer';
 import AlertComponent from '../../components/AlertComponent';
 import API from '../../utils/API';
 
-const SignIn = () => {
+const ForgotPassword = (props) => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [alert, setAlert] = useState({
     type: null,
@@ -23,26 +24,24 @@ const SignIn = () => {
   })
 
   const [formData, setFormData] = useState({
-    email: ''
+    token: props.match.params.token,
+    password: '',
+    confirmPassword: ''
   })
 
   const [validation, setvalidation] = useState({
-    emailError: null
+    passwordError: null,
+    confirmPasswordError: null
   })
 
-  const checkEmail = email => {
-    let regex = /^\S+@\S+\.\S+$/;
-    return regex.test(email)
-  }
-
   const validationCheck = () => {
-    if (formData.email === "") {
-      setvalidation({...validation, emailError: "Email cannot be blank"})
+    if (formData.password === "") {
+      setvalidation({...validation, passwordError: "Password cannot be blank"})
       return false
     }
 
-    if (!checkEmail(formData.email)) {
-      setvalidation({...validation, emailError: "Please enter a valid email address"})
+    if (formData.password !== formData.confirmPassword) {
+      setvalidation({...validation, confirmPasswordError: "Passwords do not match"})
       return false
     }
     
@@ -61,10 +60,9 @@ const SignIn = () => {
     let valid = validationCheck()
     
     if (valid) {
-      API.forgotPassword(formData)
+      API.resetPassword(formData)
       .then( res => {
-        setAlert({type: "success", msg: res.data.message})
-        setFormData({email: ''})
+        history.push("/login")
       })
       .catch( err => {
         let data = err.response.data;
@@ -88,7 +86,8 @@ const SignIn = () => {
 
     if (validation !== null){
       setvalidation({
-        emailError: null
+        passwordError: null,
+        confirmPasswordError: null
       })
     }
   }
@@ -98,30 +97,44 @@ const SignIn = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <VpnKeyIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Password Reset
+          Create New Password
         </Typography>
         <Typography component="h1" variant="body2" className={classes.text}>
-        Enter your email that you used to register. We'll send you an email with a link to reset your password.
+        Your password must be at least 6 characters long, contain at least one letter and one number.
         </Typography>
         {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
-            error = {validation.emailError}
-            helperText={validation.emailError}
+            error = {validation.passwordError}
+            helperText={validation.passwordError}
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="password"
+            label="New Password"
+            name="password"
+            type="password"
             autoFocus
             onChange={handleChange}
-            value={formData.email}
+            value={formData.password}
+          />
+          <TextField
+            error = {validation.confirmPasswordError}
+            helperText={validation.confirmPasswordError}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="confirmPassword"
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            onChange={handleChange}
+            value={formData.confirmPassword}
           />
           <Button
             type="submit"
@@ -130,17 +143,17 @@ const SignIn = () => {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Set New Password
           </Button>
           <Grid container>
             <Grid item xs>
               <Link to="/" variant="body2">
-                Back Home 
+                Back to Home Page 
               </Link>
             </Grid>
             <Grid item>
               <Link to="/login" variant="body2">
-              Remember your password?
+              Just Remembered? Login
               </Link>
             </Grid>
           </Grid>
@@ -153,4 +166,4 @@ const SignIn = () => {
   );
 }
 
-export default SignIn;
+export default ForgotPassword;

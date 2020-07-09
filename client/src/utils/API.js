@@ -17,5 +17,8 @@ export default {
     },
     forgotPassword: (data) => {
         return axios.post('/api/auth/forgot', data)
+    },
+    resetPassword: (data) => {
+        return axios.post('/api/auth/reset', data)
     }
 }
