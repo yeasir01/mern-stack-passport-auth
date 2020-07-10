@@ -92,6 +92,7 @@ module.exports = {
 
             if (!user) {
                 res.status(422).json({success: false, message: "User with this email was not found!"})
+                
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
                 .then( ({resetPassToken, email}) => {
@@ -100,7 +101,8 @@ module.exports = {
                 })
             }
             
-        }).catch( err => {
+        })
+        .catch( err => {
             res.status(400).json({success: false, message: "Server is unable to process your request at this time!"})
         })
         
@@ -113,16 +115,27 @@ module.exports = {
             
             if (!user) {
                 res.status(422).json({success: false, message: "This password reset link is invalid!"})
+
             } else if (user.tokenExpiration < Date.now()) {
                 res.status(422).json({success: false, message: "This reset password link has expired!"})
+
             } else {
-                db.User.findOneAndUpdate({_id: user._id}, {$set:{password: password}, $unset:{resetPassToken: "", tokenExpiration: ""}})
-                .then(() => {
-                    res.status(200).json({success: true, message: "Password has been sucessfully changed!"})
+                bcrypt.genSalt(10, (err, salt) => {
+                    if (err) throw err;
+            
+                    bcrypt.hash( password , salt, (err, hash) => {
+                        if (err) throw err;
+                        
+                        db.User.findOneAndUpdate({_id: user._id}, {$set:{password: hash}, $unset:{resetPassToken: "", tokenExpiration: ""}})
+                        .then(() => {
+                            res.status(200).json({success: true, message: "Password has been sucessfully changed!"})
+                        })
+                    })
                 })
             }
             
-        }).catch( err => {
+        })
+        .catch( err => {
             res.status(400).json({success: false, message: "Server is unable to process your request at this time!"})
         })
     }
