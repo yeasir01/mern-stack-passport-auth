@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
+import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,11 +17,20 @@ import API from '../../utils/API';
 
 const ForgotPassword = () => {
   const classes = useStyles();
+  const history = useHistory();
 
-  const [alert, setAlert] = useState({
-    type: null,
-    msg: null
-  })
+  const { alert, setAlert, clearAlert } = useContext(AuthContext);
+  
+  useEffect(() => {
+    if (alert.flash === false) {
+      setAlert({
+        type: null,
+        message: null,
+        flash: false
+      })
+    }
+  },[alert.flash, setAlert])
+
 
   const [formData, setFormData] = useState({
     email: ''
@@ -52,7 +62,7 @@ const ForgotPassword = () => {
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    clearAlert()
+    resetForms()
   }
   
   const handleSubmit = (event) => {
@@ -63,27 +73,24 @@ const ForgotPassword = () => {
     if (valid) {
       API.forgotPassword(formData)
       .then( res => {
-        setAlert({type: "success", msg: res.data.message})
-        setFormData({email: ''})
+        setAlert({type: "success", msg: res.data.message, flash: true})
+        history.push("/login")
       })
       .catch( err => {
         let data = err.response.data;
         
         if ( data ) {
-          setAlert({type: "error", msg: data.message})
+          setAlert({type: "error", msg: data.message, flash: false})
         } else {
-          setAlert({type: "error", msg: "Oops, something went wrong!"})
+          setAlert({type: "error", msg: "Oops, something went wrong!", flash: false})
         }
       })
     }
   }
 
-  const clearAlert = () => {
+  const resetForms = () => {
     if (alert.type !== null || alert.msg !== null) {
-      setAlert({
-        type: null,
-        msg: null
-      })
+      clearAlert()
     }
 
     if (validation !== null){
@@ -106,10 +113,10 @@ const ForgotPassword = () => {
         <Typography component="h1" variant="body2" className={classes.text}>
         No worries! Just enter your email and we'll send you a reset password link.
         </Typography>
-        {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
+        <AlertComponent/>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
-            error = {validation.emailError}
+            error = {validation.emailError ? true : false}
             helperText={validation.emailError}
             variant="outlined"
             margin="normal"
@@ -130,7 +137,7 @@ const ForgotPassword = () => {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Send Email
           </Button>
           <Grid container>
             <Grid item xs>

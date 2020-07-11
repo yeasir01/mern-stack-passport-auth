@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,10 +19,17 @@ const ForgotPassword = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const [alert, setAlert] = useState({
-    type: null,
-    msg: null
-  })
+  const { alert, setAlert, clearAlert } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (alert.flash === false) {
+      setAlert({
+        type: null,
+        message: null,
+        flash: false
+      })
+    }
+  },[alert.flash, setAlert])
 
   const [formData, setFormData] = useState({
     token: props.match.params.token,
@@ -51,7 +59,7 @@ const ForgotPassword = (props) => {
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    clearAlert()
+    resetForms()
   }
   
   const handleSubmit = (event) => {
@@ -62,26 +70,24 @@ const ForgotPassword = (props) => {
     if (valid) {
       API.resetPassword(formData)
       .then( res => {
+        setAlert({type: "success", msg: res.data.message, flash: true})
         history.push("/login")
       })
       .catch( err => {
         let data = err.response.data;
         
         if ( data ) {
-          setAlert({type: "error", msg: data.message})
+          setAlert({type: "error", msg: data.message, flash: false})
         } else {
-          setAlert({type: "error", msg: "Oops, something went wrong!"})
+          setAlert({type: "error", msg: "Oops, something went wrong!", flash: false})
         }
       })
     }
   }
 
-  const clearAlert = () => {
+  const resetForms = () => {
     if (alert.type !== null || alert.msg !== null) {
-      setAlert({
-        type: null,
-        msg: null
-      })
+      clearAlert()
     }
 
     if (validation !== null){
@@ -105,10 +111,10 @@ const ForgotPassword = (props) => {
         <Typography component="h1" variant="body2" className={classes.text}>
         Your password must be at least 6 characters long, contain at least one letter and one number.
         </Typography>
-        {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
+        <AlertComponent />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
-            error = {validation.passwordError}
+            error = {validation.passwordError ? true : false}
             helperText={validation.passwordError}
             variant="outlined"
             margin="normal"
@@ -123,7 +129,7 @@ const ForgotPassword = (props) => {
             value={formData.password}
           />
           <TextField
-            error = {validation.confirmPasswordError}
+            error = {validation.confirmPasswordError ? true : false}
             helperText={validation.confirmPasswordError}
             variant="outlined"
             margin="normal"

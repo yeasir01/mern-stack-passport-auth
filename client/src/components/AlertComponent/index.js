@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
 import Alert from '@material-ui/lab/Alert';
-import Grow from '@material-ui/core/Grow';
 import useStyles from './style';
 
-const AlertComponent= ({message, type}) => {
+const AlertComponent= () => {
 
   const classes = useStyles();
+  const { alert } = useContext(AuthContext);
 
-  //severity options: error, warning, success, info
   return (
-    <Grow in={true} timeout="auto">
+    alert.type && alert.msg &&
       <div className={classes.root}>
-        <Alert severity={type.toString()}>{message.toString()}</Alert>
+        <Alert severity={alert.type}>{alert.msg}</Alert>
       </div>
-    </Grow>
   );
 }
 

@@ -3,25 +3,25 @@ const LocalStrategy = require('passport-local').Strategy;
 const db = require('../models');
 const bcrypt = require('bcrypt');
 
-passport.use( new LocalStrategy( {usernameField: 'email', passwordField: 'password'},
-    ( email, password, done ) => {
+const options = {
+    usernameField: 'email',
+    passwordField: 'password'
+}
+
+passport.use( new LocalStrategy( options, ( email, password, done ) => {
         db.User.findOne({ email: email }, (err, user) => {
             
-            if (err) return done(err); 
+            if (err) return done(err, false); 
             
             if (!user) {
-                return done(null, false, { message: 'User does not exsits!' });
+                return done(null, false);
             }
-            
-            try {
-                if ( bcrypt.compareSync(password, user.password) ) {
-                    return done(null, user);
-                } else {
-                    return done(null, false, { message: 'Incorrect password!' });
-                }
-            } catch (err) {
-                return done(err)
-            }
+
+            if ( bcrypt.compareSync(password, user.password) ) {
+                return done(null, user);
+            } 
+           
+            return done(null, false);
 
         });
     }
@@ -29,7 +29,7 @@ passport.use( new LocalStrategy( {usernameField: 'email', passwordField: 'passwo
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
-    });
+});
     
 passport.deserializeUser((id, done) => {
     db.User.findById({_id: id}, (err, user) => {

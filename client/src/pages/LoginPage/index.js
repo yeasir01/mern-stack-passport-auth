@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
@@ -21,12 +21,17 @@ const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
   
-  const { setUser } = useContext(AuthContext);
+  const { setUser, alert, setAlert, clearAlert } = useContext(AuthContext);
 
-  const [alert, setAlert] = useState({
-    type: null,
-    msg: null
-  })
+  useEffect(() => {
+    if (alert.flash === false) {
+      setAlert({
+        type: null,
+        message: null,
+        flash: false
+      })
+    }
+  },[alert.flash, setAlert])
 
   const [formData, setFormData] = useState({
     email: '',
@@ -65,7 +70,7 @@ const SignIn = () => {
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    clearAlert()
+    resetForms()
   }
   
   const handleSubmit = (event) => {
@@ -88,18 +93,14 @@ const SignIn = () => {
         history.push("/dashboard")
       })
       .catch(err => {
-        console.log(err.response)
-          setAlert({type: "error", msg: err.response.data})
+          setAlert({type: "error", msg: err.response.data, flash: false})
       })
     }
   }
 
-  const clearAlert = () => {
+  const resetForms = () => {
     if (alert.type !== null || alert.msg !== null) {
-      setAlert({
-        type: null,
-        msg: null
-      })
+      clearAlert()
     }
 
     if (validation !== null){
@@ -120,10 +121,10 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
+        <AlertComponent />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
-            error = {validation.emailError}
+            error = {validation.emailError ? true : false}
             helperText={validation.emailError}
             variant="outlined"
             margin="normal"
@@ -138,7 +139,7 @@ const SignIn = () => {
             value={formData.email}
           />
           <TextField
-            error = {validation.passwordError}
+            error = {validation.passwordError ? true : false}
             helperText={validation.passwordError}
             variant="outlined"
             margin="normal"

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../utils/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -19,10 +20,7 @@ import API from '../../utils/API';
 const Register = () => {
   const classes = useStyles();
 
-  const [alert, setAlert] = useState({
-    type: null,
-    msg: null
-  })
+  const { alert, setAlert, clearAlert } = useContext(AuthContext);
 
   const [validation, setvalidation] = useState({
     firstNameError: null,
@@ -80,7 +78,7 @@ const Register = () => {
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    clearAlert()
+    resetForms()
   }
   
   const handleSubmit = (event) => {
@@ -109,12 +107,9 @@ const Register = () => {
     })
   }
 
-  const clearAlert = () => {
+  const resetForms = () => {
     if (alert.type !== null || alert.msg !== null) {
-      setAlert({
-        type: null,
-        msg: null
-      })
+      clearAlert()
     }
 
     if (validation !== null){
@@ -137,12 +132,12 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        {alert.type && <AlertComponent type={alert.type} message={alert.msg}/>}
+        <AlertComponent />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                error = {validation.firstNameError}
+                error = {validation.firstNameError ? true : false}
                 helperText={validation.firstNameError}
                 autoComplete="fname"
                 variant="outlined"
@@ -158,7 +153,7 @@ const Register = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                error = {validation.lastNameError}
+                error = {validation.lastNameError ? true : false}
                 helperText={validation.lastNameError}
                 variant="outlined"
                 required
@@ -173,7 +168,7 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error = {validation.emailError}
+                error = {validation.emailError ? true : false}
                 helperText={validation.emailError}
                 variant="outlined"
                 required
@@ -188,7 +183,7 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error = {validation.passwordError}
+                error = {validation.passwordError ? true : false}
                 helperText={validation.passwordError}
                 variant="outlined"
                 required
