@@ -234,6 +234,7 @@ module.exports = {
 
             </html>
             `
+            
             try {
                 let transporter = nodemailer.createTransport({
                     service: '"SendGrid"',
@@ -250,7 +251,7 @@ module.exports = {
                     html: emailHtml
                 });
                 
-                console.log("Message Sent", info.messageId);
+                console.log("Message Sent: ", info.messageId);
 
         } catch (err) {
             console.log(err)

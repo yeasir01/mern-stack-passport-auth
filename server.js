@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/mern-pass-auth'
     useCreateIndex: true,
     useFindAndModify: false
 }).then(() => {
-    console.log('Mongoose has sucessfully connected to MongoDB!')
+    console.log('Sucessfully connected to MongoDB!')
 }).catch(err => {
     console.log('There was an issue connecting to MongoDB')
 });

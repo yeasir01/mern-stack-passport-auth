@@ -95,15 +95,15 @@ module.exports = {
                 
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
-                .then( ({resetPassToken, email}) => {
+                .then( ({email, resetPassToken}) => {
                     sendMail(email, resetPassToken)
-                    res.status(200).json({success: true, message: "Check your email, link will expire in 15 min!"})
+                    res.status(200).json({success: true, message: "Please check your email, link will expire in 15 min!"})
                 })
             }
             
         })
         .catch( err => {
-            res.status(400).json({success: false, message: "Server is unable to process your request at this time!"})
+            res.status(400).json({success: false, message: "The server is unable to process your request at this time!"})
         })
         
     },
@@ -114,10 +114,10 @@ module.exports = {
         .then( user => {
             
             if (!user) {
-                res.status(422).json({success: false, message: "This password reset link is invalid!"})
+                res.status(422).json({success: false, message: "Password reset link is either invalid or expired!"})
 
             } else if (user.tokenExpiration < Date.now()) {
-                res.status(422).json({success: false, message: "This reset password link has expired!"})
+                res.status(422).json({success: false, message: "Password reset link has expired!"})
 
             } else {
                 bcrypt.genSalt(10, (err, salt) => {
@@ -136,7 +136,7 @@ module.exports = {
             
         })
         .catch( err => {
-            res.status(400).json({success: false, message: "Server is unable to process your request at this time!"})
+            res.status(400).json({success: false, message: "The server is unable to process your request at this time!"})
         })
     }
 }
