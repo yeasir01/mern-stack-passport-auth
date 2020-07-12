@@ -24,7 +24,7 @@ function App() {
       hideProgressBar={true} 
       transition={Slide}
       draggable={false}
-      bodyClassName="toast-text"
+      closeButton={false}
     />
     <BrowserRouter>
         <Switch>
