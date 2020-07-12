@@ -29,7 +29,7 @@ function PrivateRoute({ component: Component, ...rest }) {
         name: null,
         id: null
       })
-
+      console.log(err)
       loadingTimeout()
     })
   },[setUser])

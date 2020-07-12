@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../../utils/AuthContext';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,25 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import useStyles from './style';
 import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
-import AlertComponent from '../../components/AlertComponent';
 import API from '../../utils/API';
+import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
   const classes = useStyles();
   const history = useHistory();
-
-  const { alert, setAlert, clearAlert } = useContext(AuthContext);
-  
-  useEffect(() => {
-    if (alert.flash === false) {
-      setAlert({
-        type: null,
-        message: null,
-        flash: false
-      })
-    }
-  },[alert.flash, setAlert])
-
 
   const [formData, setFormData] = useState({
     email: ''
@@ -73,27 +59,23 @@ const ForgotPassword = () => {
     if (valid) {
       API.forgotPassword(formData)
       .then( res => {
-        setAlert({type: "success", msg: res.data.message, flash: true})
+        toast.success(res.data.message)
         history.push("/login")
       })
       .catch( err => {
         let data = err.response.data;
-        
+
         if ( data ) {
-          setAlert({type: "error", msg: data.message, flash: false})
+          toast.error(data.message)
         } else {
-          setAlert({type: "error", msg: "Oops, something went wrong!", flash: false})
+          toast.error('Oops, something went wrong!')
         }
       })
     }
   }
 
   const resetForms = () => {
-    if (alert.type !== null || alert.msg !== null) {
-      clearAlert()
-    }
-
-    if (validation !== null){
+    if (validation.emailError !== null){
       setvalidation({
         emailError: null
       })
@@ -113,7 +95,6 @@ const ForgotPassword = () => {
         <Typography component="h1" variant="body2" className={classes.text}>
         No worries! Just enter your email and we'll send you a reset password link.
         </Typography>
-        <AlertComponent/>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.emailError ? true : false}

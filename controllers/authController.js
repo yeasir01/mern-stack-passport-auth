@@ -7,9 +7,15 @@ const capitalize = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const checkEmail = email => {
+const validEmail = email => {
     let regex = /^\S+@\S+\.\S+$/;
     return regex.test(email)
+}
+
+const validPassword = password => {
+    //requires a minimum of eight characters, at least one letter and one number
+    let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return regex.test(password)
 }
 
 module.exports = {
@@ -33,21 +39,21 @@ module.exports = {
        let { email, password, firstName, lastName } = req.body;
 
        if (!email || !password || !firstName || !lastName) {
-           return res.status(400).json({ success: false, message: "Please complete all required fields" })
+           return res.status(400).json({ success: false, message: "Please complete all required fields." })
        }
 
-       if (password.length < 6) {
-           return res.status(400).json({ success: false, message: "Password must be greater than 6 characters" })
+       if (!validPassword(password)) {
+           return res.status(400).json({ success: false, message: "Password requires a minimum of eight characters, at least one letter and one number" })
        }
        
-       if (!checkEmail(email)) {
-           return res.status(400).json({ success: false, message: "Please enter a valid email" })
+       if (!validEmail(email)) {
+           return res.status(400).json({ success: false, message: "Please enter a valid email address." })
        }
 
        db.User.findOne({ email: email })
        .then( user => {
         
-           if (user) return res.status(400).json({ success: false, message: "That email already exists, please choose another" })
+           if (user) return res.status(400).json({ success: false, message: "That email is already in use." })
 
            let newUser = new db.User({
                email,
@@ -62,10 +68,10 @@ module.exports = {
                     
                     newUser.save()
                     .then(() => {
-                        res.status(201).json({success: true, message: "User successfully created!"})
+                        res.status(201).json({success: true, message: "Account successfully created."})
                     })
                     .catch( err => {
-                        res.status(500).json({success: false, message: "Server Issue: Unable to create user!"})
+                        res.status(500).json({success: false, message: "Server Issue: Unable to create account!"})
                     })
                 })
             })
@@ -79,7 +85,7 @@ module.exports = {
             let {firstName, lastName, id} = req.user;
             res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
         } else {
-            res.status(401).json({success: false, message: "Login Required!"})
+            res.status(401).json({success: false, message: "Sign in required to access that route."})
         }
     },
     forgotPassword: (req, res) => {
@@ -91,7 +97,7 @@ module.exports = {
         .then( user => {
 
             if (!user) {
-                res.status(422).json({success: false, message: "User with this email was not found!"})
+                res.status(422).json({success: false, message: "No user with that email was found!"})
                 
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})

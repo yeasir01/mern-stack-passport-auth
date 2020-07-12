@@ -2,3 +2,31 @@ a {
     color: #3f51b5;
     text-decoration: inherit;
 }
+
+.Toastify__toast-container--bottom-center {
+    bottom: 0;
+    padding: 0;
+    margin: -1rem;
+    width: 100vw;
+    text-align: center;
+}
+
+.Toastify__toast--error {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.Toastify__toast--success {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.Toastify__toast--info {
+    background-color: #3f51b5;
+    color: #fff;
+}
+
+.Toastify__toast--warning {
+    background-color: #ffc107;
+    color: #000;
+}

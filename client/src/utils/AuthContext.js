@@ -11,12 +11,6 @@ export default ({children}) => {
         id: null
     });
 
-    const [alert, setAlert] = useState({
-        type: null,
-        msg: null,
-        flash: false
-    })
-
     const logout = () => {
         API.logout()
         .then( res => {
@@ -36,16 +30,8 @@ export default ({children}) => {
         })
     }
 
-    const clearAlert = () => {
-        setAlert({
-            type: null,
-            message: null,
-            flash: false
-        })
-    }
-
     return(
-        <AuthContext.Provider value={{user, setUser, logout, alert, setAlert, clearAlert}}>
+        <AuthContext.Provider value={{user, setUser, logout}}>
             { children }
         </AuthContext.Provider>
     )

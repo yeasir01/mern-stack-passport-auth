@@ -29,6 +29,7 @@ This project is open source (code contributions welcome). The intended is for pr
 - React
 - Material-UI
 - Axios (browser support)
+- React-toastify
 
 ## Starting the app locally
 1) Download or clone this repository.

@@ -8,10 +8,24 @@ import NotFoundPage from '../../pages/NotFoundPage';
 import PrivateRoute from '../../utils/PrivateRoute';
 import ForgotPassword from '../../pages/ForgotPassword'
 import ResetPassword from '../../pages/ResetPassword'
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css'
 import './global.css';
+
+toast.configure()
 
 function App() {
   return (
+    <>
+    <ToastContainer 
+      position={"bottom-center"} 
+      autoClose={5000}
+      limit={1}
+      hideProgressBar={true} 
+      transition={Slide}
+      draggable={false}
+      bodyClassName="toast-text"
+    />
     <BrowserRouter>
         <Switch>
           <Route exact path="/" component={HomePage} />
@@ -23,6 +37,7 @@ function App() {
           <Route path="*" component={NotFoundPage} />
         </Switch>
     </BrowserRouter>
+    </>
   );
 };
 

@@ -1,26 +1,22 @@
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../../utils/AuthContext';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
-import useStyles from './style'
-import AlertComponent from '../../components/AlertComponent'
+import useStyles from './style';
 import API from '../../utils/API';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const classes = useStyles();
-
-  const { alert, setAlert, clearAlert } = useContext(AuthContext);
+  const history = useHistory();
 
   const [validation, setvalidation] = useState({
     firstNameError: null,
@@ -36,10 +32,16 @@ const Register = () => {
     password: ''
   })
 
-  const checkEmail = email => {
+  const validEmail = email => {
     let regex = /^\S+@\S+\.\S+$/;
     return regex.test(email)
   }
+
+  const validPassword = password => {
+    //requires a minimum of eight characters, at least one letter and one number
+    let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return regex.test(password)
+}
 
   const validationCheck = () => {
     if (formData.firstName === "") {
@@ -57,7 +59,7 @@ const Register = () => {
       return false
     }
 
-    if (!checkEmail(formData.email)) {
+    if (!validEmail(formData.email)) {
       setvalidation({...validation, emailError: "Please enter a valid email address"})
       return false
     }
@@ -67,8 +69,8 @@ const Register = () => {
       return false
     }
 
-    if (formData.password.length < 6) {
-      setvalidation({...validation, passwordError: "Password must be 6 characters or longer"})
+    if (!validPassword(formData.password)) {
+      setvalidation({...validation, passwordError: "Requires eight characters, at least one letter & one number"})
       return false
     }
 
@@ -89,30 +91,17 @@ const Register = () => {
     if (valid) {
       API.register(formData)
       .then(res => {
-        setAlert({type:"success", msg: res.data.message})
-        clearForm()
+        toast.success(res.data.message)
+        history.push("/login")
       })
       .catch(err => {
-        setAlert({type:"error", msg: err.response.data.message})
+        toast.error(err.response.data.message)
       })
     }
-  }
-
-  const clearForm = () => {
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
-    })
   }
 
   const resetForms = () => {
-    if (alert.type !== null || alert.msg !== null) {
-      clearAlert()
-    }
-
-    if (validation !== null){
+    if (validation.NameError !== null){
       setvalidation({
         firstNameError: null,
         lastNameError: null,
@@ -132,7 +121,6 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <AlertComponent />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -195,12 +183,6 @@ const Register = () => {
                 name="password"
                 onChange={handleChange}
                 value={formData.password}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>
           </Grid>
