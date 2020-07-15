@@ -131,7 +131,6 @@ const Register = () => {
               <TextField
                 error = {validation.firstNameError ? true : false}
                 helperText={validation.firstNameError}
-                autoComplete="fname"
                 variant="outlined"
                 required
                 fullWidth
@@ -153,7 +152,6 @@ const Register = () => {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
-                autoComplete="lname"
                 onChange={handleChange}
                 value={formData.lastName}
               />
@@ -168,7 +166,6 @@ const Register = () => {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
                 onChange={handleChange}
                 value={formData.email}
               />
@@ -183,7 +180,6 @@ const Register = () => {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
                 name="password"
                 onChange={handleChange}
                 value={formData.password}
