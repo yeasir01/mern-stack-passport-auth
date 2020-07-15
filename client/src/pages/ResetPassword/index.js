@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,11 +12,13 @@ import useStyles from './style';
 import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
 import API from '../../utils/API';
+import Alert from '../../components/Alerts';
 import { toast } from 'react-toastify';
 
 const ForgotPassword = (props) => {
   const classes = useStyles();
   const history = useHistory();
+  const alertRef = useRef();
 
   const [formData, setFormData] = useState({
     token: props.match.params.token,
@@ -57,20 +59,24 @@ const ForgotPassword = (props) => {
     if (valid) {
       API.resetPassword(formData)
       .then( res => {
-        toast.success(res.data.message)
-        history.push("/login")
+        history.push({
+          pathname: '/login',
+          alert: {type: "success", message: "Successfully Changed! Please log in."}
+        })
       })
       .catch( err => {
         let data = err.response.data;
-        
+
         if ( data ) {
-          toast.error(data.message)
+          alertRef.current.createAlert("error", data.message, true);
         } else {
-          toast.error('Oops, something went wrong!')
+          alertRef.current.createAlert("error", "Oops, something went wrong!", true);
         }
       })
     }
   }
+
+console.log(props)
 
   const resetForms = () => {
     if (validation.passwordError !== null || validation.confirmPasswordError !== null) {
@@ -94,6 +100,7 @@ const ForgotPassword = (props) => {
         <Typography component="h1" variant="body2" className={classes.text}>
         Your password must be at least 6 characters long, contain at least one letter and one number.
         </Typography>
+        <Alert ref={alertRef} />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.passwordError ? true : false}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,11 +12,13 @@ import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
 import useStyles from './style';
 import API from '../../utils/API';
-import { toast } from 'react-toastify';
+import Alert from '../../components/Alerts';
+import { validEmail, validPassword } from '../../utils/ValidationHelpers'
 
 const Register = () => {
   const classes = useStyles();
   const history = useHistory();
+  const alertRef = useRef();
 
   const [validation, setvalidation] = useState({
     firstNameError: null,
@@ -31,17 +33,6 @@ const Register = () => {
     email: '',
     password: ''
   })
-
-  const validEmail = email => {
-    let regex = /^\S+@\S+\.\S+$/;
-    return regex.test(email)
-  }
-
-  const validPassword = password => {
-    //requires a minimum of eight characters, at least one letter and one number
-    let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    return regex.test(password)
-}
 
   const validationCheck = () => {
     if (formData.firstName === "") {
@@ -80,7 +71,7 @@ const Register = () => {
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    resetForms()
+    clearValidation()
   }
   
   const handleSubmit = (event) => {
@@ -91,16 +82,28 @@ const Register = () => {
     if (valid) {
       API.register(formData)
       .then(res => {
-        toast.success(res.data.message)
-        history.push("/login")
+        history.push({
+          pathname: '/login',
+          alert: {
+            type: "success", 
+            message: res.data.message, 
+            show:true
+          }
+        })
       })
       .catch(err => {
-        toast.error(err.response.data.message)
+        let data = err.response.data;
+
+        if ( data ) {
+          alertRef.current.createAlert("error", data.message, true);
+        } else {
+          alertRef.current.createAlert("error", "Oops, something went wrong!", true);
+        }
       })
     }
   }
 
-  const resetForms = () => {
+  const clearValidation = () => {
     if (validation.NameError !== null){
       setvalidation({
         firstNameError: null,
@@ -121,6 +124,7 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        <Alert ref={alertRef} />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

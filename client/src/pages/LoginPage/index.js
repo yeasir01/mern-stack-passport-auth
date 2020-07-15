@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { AuthContext } from '../../utils/AuthContext';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,11 +13,14 @@ import useStyles from './style';
 import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
 import API from '../../utils/API';
-import { toast } from 'react-toastify';
+import Alert from '../../components/Alerts';
+import { validEmail, validPassword } from '../../utils/ValidationHelpers';
 
-const SignIn = () => {
+const SignIn = (props) => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
+  const alertRef = useRef();
   
   const { setUser } = useContext(AuthContext);
 
@@ -31,24 +34,24 @@ const SignIn = () => {
     passwordError: null
   })
 
-  const checkEmail = email => {
-    let regex = /^\S+@\S+\.\S+$/;
-    return regex.test(email)
-  }
-
   const validationCheck = () => {
     if (formData.email === "") {
       setvalidation({...validation, emailError: "Email cannot be blank"})
       return false
     }
 
-    if (!checkEmail(formData.email)) {
+    if (!validEmail(formData.email)) {
       setvalidation({...validation, emailError: "Please enter a valid email address"})
       return false
     }
 
     if (formData.password === "") {
       setvalidation({...validation, passwordError: "Password cannot be blank"})
+      return false
+    }
+
+    if (!validPassword(formData.password)) {
+      setvalidation({...validation, passwordError: "Invalid password! Should be eight characters in length, at least one letter & one number."})
       return false
     }
 
@@ -61,25 +64,33 @@ const SignIn = () => {
     resetForms()
   }
   
+  
   const handleSubmit = (event) => {
     event.preventDefault()
     
-    let valid = validationCheck()
+    let valid = validationCheck();
+    let { from } = location.state || { from: {pathname: "/dashboard"}};
     
     if (valid) {
       API.login(formData)
       .then(res => {
-        
+
         setUser({
           isAuthenticated: res.data.isAuthenticated,
           name: res.data.user,
           id: res.data.id
-        })
+        });
   
-        history.push("/dashboard")
+        history.replace(from)
       })
       .catch(err => {
-        toast.info(err.response.data)
+        let status = err.response.status;
+
+        if ( status === 401 ) {
+          alertRef.current.createAlert("error", "Incorrect username or password.", true);
+        } else {
+          alertRef.current.createAlert("error", "Oops, something went wrong.", true);
+        }
       })
     }
   }
@@ -103,6 +114,7 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        <Alert ref={alertRef} />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.emailError ? true : false}

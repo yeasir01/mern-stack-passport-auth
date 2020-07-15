@@ -17,7 +17,7 @@ export default ({children}) => {
             initialUserState()
         })
         .catch( err => {
-            console.log(err.response);
+            console.log(err);
             initialUserState()
         })
     };

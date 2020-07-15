@@ -23,6 +23,7 @@
     "url": "https://github.com/yeasir01/mern-stack-passport-auth/issues"
   },
   "dependencies": {
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "bcrypt": "^5.0.0",
     "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",

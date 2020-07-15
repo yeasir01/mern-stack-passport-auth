@@ -1,7 +1,7 @@
 const db = require('../models');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { sendMail } = require('../config/nodeMailer')
+const { sendMail } = require('../utils/nodeMailer')
 
 const capitalize = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -39,22 +39,24 @@ module.exports = {
        let { email, password, firstName, lastName } = req.body;
 
        if (!email || !password || !firstName || !lastName) {
-           return res.status(400).json({ success: false, message: "Please complete all required fields." })
+           res.status(400).json({ success: false, message: "Please complete all required fields." })
        }
 
        if (!validPassword(password)) {
-           return res.status(400).json({ success: false, message: "Password requires a minimum of eight characters, at least one letter and one number" })
+           res.status(400).json({ success: false, message: "Password requires a minimum of eight characters, at least one letter and one number" })
        }
        
        if (!validEmail(email)) {
-           return res.status(400).json({ success: false, message: "Please enter a valid email address." })
+           res.status(400).json({ success: false, message: "Please enter a valid email address." })
        }
 
        db.User.findOne({ email: email })
        .then( user => {
         
-           if (user) return res.status(400).json({ success: false, message: "That email is already in use." })
-
+           if (user) {
+               res.status(400).json({ success: false, message: "That email is already in use." })
+           }
+           
            let newUser = new db.User({
                email,
                password,
@@ -91,7 +93,7 @@ module.exports = {
     forgotPassword: (req, res) => {
         let { email } = req.body;
         let token = crypto.randomBytes(40).toString('hex');
-        let expiration = Date.now() + (1000 * 60 * 15);
+        let expiration = Date.now() + (1000 * 60 * 30);
         
         db.User.findOne({ email: email })
         .then( user => {
@@ -101,9 +103,10 @@ module.exports = {
                 
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
-                .then( ({email, resetPassToken}) => {
-                    sendMail(email, resetPassToken)
-                    res.status(200).json({success: true, message: "Please check your email, link will expire in 15 min!"})
+                .then( ({email, resetPassToken, firstName}) => {
+                    let fName = capitalize(firstName)
+                    sendMail(email, resetPassToken, fName)
+                    res.status(200).json({success: true, message: "Please check your email, link will expire in 30 min!"})
                 })
             }
             
@@ -124,6 +127,9 @@ module.exports = {
 
             } else if (user.tokenExpiration < Date.now()) {
                 res.status(422).json({success: false, message: "Password reset link has expired!"})
+
+            } else if (!validPassword(password)){
+                res.status(400).json({ success: false, message: "Password requires a minimum of eight characters, at least one letter and one number" })
 
             } else {
                 bcrypt.genSalt(10, (err, salt) => {

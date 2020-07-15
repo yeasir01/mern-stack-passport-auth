@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,11 +12,13 @@ import useStyles from './style';
 import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
 import API from '../../utils/API';
-import { toast } from 'react-toastify';
+import Alert from '../../components/Alerts';
+import { validEmail } from '../../utils/ValidationHelpers'
 
 const ForgotPassword = () => {
   const classes = useStyles();
   const history = useHistory();
+  const alertRef = useRef();
 
   const [formData, setFormData] = useState({
     email: ''
@@ -26,18 +28,13 @@ const ForgotPassword = () => {
     emailError: null
   })
 
-  const checkEmail = email => {
-    let regex = /^\S+@\S+\.\S+$/;
-    return regex.test(email)
-  }
-
   const validationCheck = () => {
     if (formData.email === "") {
       setvalidation({...validation, emailError: "Email cannot be blank"})
       return false
     }
 
-    if (!checkEmail(formData.email)) {
+    if (!validEmail(formData.email)) {
       setvalidation({...validation, emailError: "Please enter a valid email address"})
       return false
     }
@@ -48,7 +45,7 @@ const ForgotPassword = () => {
   const handleChange = (event) => {
     let {value, name} = event.currentTarget;
     setFormData({...formData, [name]:value})
-    resetForms()
+    clearValidation()
   }
   
   const handleSubmit = (event) => {
@@ -59,22 +56,30 @@ const ForgotPassword = () => {
     if (valid) {
       API.forgotPassword(formData)
       .then( res => {
-        toast.success(res.data.message)
-        history.push("/login")
+
+        history.push({
+          pathname: '/login',
+          alert: {
+            type: "success", 
+            message: res.data.message, 
+            show:true
+          }
+        })
+
       })
       .catch( err => {
         let data = err.response.data;
 
         if ( data ) {
-          toast.error(data.message)
+          alertRef.current.createAlert("error", data.message, true);
         } else {
-          toast.error('Oops, something went wrong!')
+          alertRef.current.createAlert("error", "Oops, something went wrong!", true);
         }
       })
     }
   }
 
-  const resetForms = () => {
+  const clearValidation = () => {
     if (validation.emailError !== null){
       setvalidation({
         emailError: null
@@ -93,8 +98,9 @@ const ForgotPassword = () => {
           Forgot Password?
         </Typography>
         <Typography component="h1" variant="body2" className={classes.text}>
-        No worries! Just enter your email and we'll send you a reset password link.
+        No worries! Just enter the email you used to register and we'll send you a reset password link.
         </Typography>
+        <Alert ref={alertRef}/>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.emailError ? true : false}
