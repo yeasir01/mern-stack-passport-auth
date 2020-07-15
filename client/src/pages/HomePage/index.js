@@ -7,7 +7,7 @@ const HomePage = () => {
             <h1>
                 MERN STACK PASSPORT AUTH BOILER PLATE
             </h1>
-            <Link to="/register">REGISTER</Link> TO CREATE ACCOUNT.
+            <Link to="/register">CLICK HERE</Link> TO CREATE A NEW ACCOUNT.
             <br/>
             <Link to="/login">CLICK HERE</Link> TO LOGIN.
             <br/>
