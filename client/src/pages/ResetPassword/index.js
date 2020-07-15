@@ -13,7 +13,6 @@ import Container from '@material-ui/core/Container';
 import Footer from '../../components/Footer';
 import API from '../../utils/API';
 import Alert from '../../components/Alerts';
-import { toast } from 'react-toastify';
 
 const ForgotPassword = (props) => {
   const classes = useStyles();
@@ -75,8 +74,6 @@ const ForgotPassword = (props) => {
       })
     }
   }
-
-console.log(props)
 
   const resetForms = () => {
     if (validation.passwordError !== null || validation.confirmPasswordError !== null) {
