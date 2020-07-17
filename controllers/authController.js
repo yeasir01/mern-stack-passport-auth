@@ -1,7 +1,7 @@
 const db = require('../models');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { sendMail } = require('../utils/nodeMailer')
+const { sendMail } = require('../utils/nodeMailer');
 
 const capitalize = string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -99,14 +99,21 @@ module.exports = {
         .then( user => {
 
             if (!user) {
-                res.status(422).json({success: false, message: "No user with that email was found!"})
+                res.status(422).json({success: false, message: "No user with that email found!"})
                 
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
-                .then( ({email, resetPassToken, firstName}) => {
-                    let fName = capitalize(firstName)
-                    sendMail(email, resetPassToken, fName)
-                    res.status(200).json({success: true, message: "Please check your email, link will expire in 30 min!"})
+                .then( user => {
+                    
+                    let options = {
+                        template: "password-reset",
+                        name: capitalize(user.firstName) + " " + capitalize(user.lastName),
+                        token: user.resetPassToken,
+                        email: user.email
+                    }
+
+                    sendMail(options)
+                    res.status(200).json({success: true, message: "A password reset link was sent. Click the link in the email to create a new password."})
                 })
             }
             

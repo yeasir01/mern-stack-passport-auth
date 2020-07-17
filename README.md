@@ -2,9 +2,7 @@
 
 ## About This Project
 
-This is boilerplate code for a MERN stack authentication system using PasspportJS. The intent of this project is to create an easy to use, performant login system that can be utilized for any member based web applcation system.
-
-This project is open source (code contributions welcome). The intended is for projects that do not require redux. It uses React's built in Context API for managing auth state.
+This is boilerplate code for a MERN stack authentication system using PasspportJS - Local Stratgey. The intent of this project is to create an easy to use, full featured, performant login system.
 
 ## Project Goals
 1) Security
@@ -12,23 +10,36 @@ This project is open source (code contributions welcome). The intended is for pr
 3) Small footprint w/minimal dependencies
 4) Use all modern functional based components & hooks
 5) Modern JS ES6 Syntax
-6) No Redux (due to overhead)
+6) No Redux (use context for state management)
 7) Reduce or eliminate all unnecessary re-renders
+
+## What is currently working?
+- User registration
+- Login
+- Login redirect to history URL
+- Form validation (client & server side)
+- Session cookies w/ttl
+- Forgot password form
+- Templated email for password resets
+- Password reset form
+
+## Issues?
+Report [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
 
 ## Technologies (Server-Side)
 - Express
 - Express-Sessions
-- Passport
-- Passport-Local
+- Passport & Passport-Local
 - Bcrypt
 - Mongoose & MongoDB
 - Connect-Mongo
 - Nodemailer
+- Handlebars (email templating)
 
 ## Technologies (Client-Side)
 - React
 - Material-UI
-- Axios (for browser support)
+- Axios (Improved browser support)
 
 ## Starting the app locally
 1) Download or clone this repository.
@@ -37,7 +48,7 @@ This project is open source (code contributions welcome). The intended is for pr
 
 ```
 SESSION_SECRET = yourCustomSuperSecertPassPhraseHere
-EMAIL_USER = yourEmailHere
+EMAIL_USERNAME = yourEmailHere
 EMAIL_PASSWORD = yourEmailPasswordHere
 ```
 
@@ -52,12 +63,12 @@ This should install node modules within the server and the client folder.
 After both installations complete, run the following command in your terminal:
 
 ```
-npm start
+npm run dev
 ```
 
 Your app should now be running on <http://localhost:3000>. The Express server <http://localhost:5000> should intercept any AJAX requests from the client.
 
-
 ## Deployment (Heroku)
 
 To deploy, simply add and commit your changes, and push to Heroku. As is, the NPM scripts should take care of the rest.
+
