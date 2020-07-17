@@ -16,12 +16,12 @@ This is boilerplate code for a MERN stack authentication system using PasspportJ
 ## What is currently working?
 - User registration
 - Login
-- Login redirect to history URL
+- Redirects to history URL after login
 - Form validation (client & server side)
 - Session cookies w/ttl
 - Forgot password form
-- Templated email for password resets
 - Password reset form
+- Templated email for password resets
 
 ## Issues?
 Report [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
@@ -47,6 +47,7 @@ Report [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
 3) Paste the following into the .env file.
 
 ```
+MONGODB_URI = yourMongoAtlasURLAndPasswordHere
 SESSION_SECRET = yourCustomSuperSecertPassPhraseHere
 EMAIL_USERNAME = yourEmailHere
 EMAIL_PASSWORD = yourEmailPasswordHere
@@ -70,5 +71,4 @@ Your app should now be running on <http://localhost:3000>. The Express server <h
 
 ## Deployment (Heroku)
 
-To deploy, simply add and commit your changes, and push to Heroku. As is, the NPM scripts should take care of the rest.
-
+To deploy, simply add and commit your changes then setup your environment variables on the settings page, & push to Heroku. the NPM scripts should take care of the rest.
