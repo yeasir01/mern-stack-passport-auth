@@ -1,8 +1,8 @@
 # :closed_lock_with_key: MERN Stack Passport Auth Boilerplate
-<div style="display:inline-block;">
+<p align="left">
     <img src="./images/mobile_app.gif" style="width: 49%;">
     <img src="./images/email.png" style="width: 49%;">
-</div>
+</p>
 
 ## About This Project
 
