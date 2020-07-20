@@ -12,20 +12,16 @@ const validEmail = email => {
     return regex.test(email)
 }
 
+//requires a minimum of eight characters, at least one letter and one number
 const validPassword = password => {
-    //requires a minimum of eight characters, at least one letter and one number
     let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return regex.test(password)
 }
 
 module.exports = {
     login: (req, res) => {
-        if (req.isAuthenticated()) {
-            let { firstName, lastName, id } = req.user;
-            res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
-        } else {
-            res.status(401).json({success: false, message: "Incorrect email or password"})
-        }
+        let { firstName, lastName, id } = req.user;
+        res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true });
     },
     logout: (req, res) => {
         if (req.isAuthenticated()) {
@@ -63,7 +59,7 @@ module.exports = {
                ...req.body
            })
 
-           bcrypt.genSalt(10, (err, salt) => {
+           bcrypt.genSalt(12, (err, salt) => {
                 bcrypt.hash( newUser.password , salt, (err, hash) => {
                     if (err) throw err;
                     newUser.password = hash;
@@ -104,15 +100,14 @@ module.exports = {
             } else {
                 db.User.findOneAndUpdate({_id: user._id}, {$set:{resetPassToken: token, tokenExpiration: expiration}}, {new:true})
                 .then( user => {
-                    
-                    let options = {
+
+                    sendMail({
                         template: "password-reset",
-                        name: capitalize(user.firstName) + " " + capitalize(user.lastName),
+                        name: `${capitalize(user.firstName)}  ${capitalize(user.lastName)}`,
                         token: user.resetPassToken,
                         email: user.email
-                    }
-
-                    sendMail(options)
+                    })
+                    
                     res.status(200).json({success: true, message: "A password reset link was sent. Click the link in the email to create a new password."})
                 })
             }
@@ -139,7 +134,7 @@ module.exports = {
                 res.status(400).json({ success: false, message: "Password requires a minimum of eight characters, at least one letter and one number" })
 
             } else {
-                bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.genSalt(12, (err, salt) => {
                     if (err) throw err;
             
                     bcrypt.hash( password , salt, (err, hash) => {

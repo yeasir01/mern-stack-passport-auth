@@ -7,20 +7,19 @@ import API from './API';
 function PrivateRoute({ component: Component, ...rest }) {
 
   const { user, setUser } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     API.checkAuthState()
     .then(res => {
-        let { user, id, isAuthenticated } = res.data;
-        
+
         setUser({
-          isAuthenticated: isAuthenticated,
-          name: user,
-          id: id
+          isAuthenticated: res.data.isAuthenticated,
+          name: res.data.user,
+          id: res.data.id
         })
 
-        loadingTimeout()
+        setIsLoading(false)
     })
     .catch( err => { 
       
@@ -29,17 +28,10 @@ function PrivateRoute({ component: Component, ...rest }) {
         name: null,
         id: null
       })
-      console.log(err)
-      loadingTimeout()
+
+      setIsLoading(false)
     })
   },[setUser])
-  
-  const loadingTimeout = () => {
-    setTimeout(() => {
-      setIsLoading(false)
-      clearTimeout(this)
-    }, 100)
-  }
 
   return (
     <>

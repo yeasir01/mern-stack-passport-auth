@@ -42,7 +42,7 @@ const Alerts = forwardRef((props, ref) => {
     })
   }
 
-  useImperativeHandle(ref, ()=>{
+  useImperativeHandle(ref, ()=> {
     return {
       createAlert: createAlert
     }
@@ -51,7 +51,7 @@ const Alerts = forwardRef((props, ref) => {
   //severity options ["error","info","success","warning"]
   return (
     <div className={classes.root} onClick={clearAlert}>
-      <Collapse in={alert.show} timeout={400}>
+      <Collapse in={alert.show} timeout={600}>
         <Alert className={classes.topMargin} severity={alert.type || "info"}>{alert.message}</Alert>
       </Collapse>
     </div>

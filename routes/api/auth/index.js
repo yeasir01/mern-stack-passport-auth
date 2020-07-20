@@ -13,7 +13,7 @@ router.route('/login')
     // @route  POST /api/auth/login
     // @desc   POST username & password & start a session
     // @access Public {successRedirect: "/dashboard"}
-    .post(passport.authenticate('local'), authController.login)
+    .post(passport.authenticate('local') , authController.login)
 
 router.route('/logout')
     // @route  GET /api/auth/logout

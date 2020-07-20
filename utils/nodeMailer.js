@@ -13,13 +13,15 @@ let transporter = nodemailer.createTransport({
 });
 
 const renderTemplate = async (templateSource, options) => {
+
     try {
         let source = fs.readFileSync(path.join(__dirname, '../templates', templateSource), 'utf8');
         let template = handlebars.compile(source);
         return template(options);
     } catch (err) {
-        console.error(err);
+        console.error(err)
     }
+    
 }
 
 const sendMail = async (options) => {
