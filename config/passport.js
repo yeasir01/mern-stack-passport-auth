@@ -19,7 +19,7 @@ passport.use( new LocalStrategy( options, ( email, password, done ) => {
 
             if ( !bcrypt.compareSync(password, user.password) ) {
                 return done(null, false);
-            } 
+            }
            
             return done(null, user);
 
@@ -32,7 +32,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-    db.User.findById({_id: id},{ password: 0, resetPassToken: 0, tokenExpiration: 0}, (err, user) => {
+    db.User.findById({_id: id}, (err, user) => {
         if (err) return done(err)
         done(null, user);
     });

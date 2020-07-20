@@ -74,7 +74,6 @@ const SignIn = (props) => {
     if (valid) {
       API.login(formData)
       .then(res => {
-
         setUser({
           isAuthenticated: res.data.isAuthenticated,
           name: res.data.user,

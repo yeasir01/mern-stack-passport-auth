@@ -24,12 +24,8 @@ module.exports = {
         res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true });
     },
     logout: (req, res) => {
-        if (req.isAuthenticated()) {
-            req.logout()
-            res.status(200).json({ success: true, message: "Successfully logged out" })
-        } else {
-            res.status(400).json({ success: false, message: "No active sessions" })
-        }
+        req.logout()
+        res.status(200).json({ success: true, message: "Successfully logged out" })
     },
     register: (req, res) => {
        let { email, password, firstName, lastName } = req.body;
@@ -78,13 +74,9 @@ module.exports = {
             res.status(500).json({success: false, message: "Internal server issue!"})
         })
     },
-    checkAuthState: (req, res) => {
-        if (req.isAuthenticated()) {
-            let {firstName, lastName, id} = req.user;
-            res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
-        } else {
-            res.status(401).json({success: false, message: "Sign in required to access that route."})
-        }
+    authStatus: (req, res) => {
+        let {firstName, lastName, id} = req.user;
+        res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true })
     },
     forgotPassword: (req, res) => {
         let { email } = req.body;
@@ -128,7 +120,7 @@ module.exports = {
                 res.status(422).json({success: false, message: "Password reset link is either invalid or expired!"})
 
             } else if (user.tokenExpiration < Date.now()) {
-                res.status(422).json({success: false, message: "Password reset link has expired!"})
+                res.status(422).json({success: false, message: "This password reset link has expired!"})
 
             } else if (!validPassword(password)){
                 res.status(400).json({ success: false, message: "Password requires a minimum of eight characters, at least one letter and one number" })
