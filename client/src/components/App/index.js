@@ -18,8 +18,8 @@ function App() {
           <Route exact path="/" component={HomePage} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
-          <Route path="/forgot" component={ForgotPassword} />
-          <Route path="/reset/:token" component={ResetPassword} />
+          <Route path="/forgot-password" component={ForgotPassword} />
+          <Route path="/reset-password/:token" component={ResetPassword} />
           <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route path="*" component={NotFoundPage} />
         </Switch>
