@@ -15,21 +15,17 @@ const UserSchema = new Schema({
     email: {
         type: String,
         required: true,
-        index: {unique: true},
-        trim: true
+        index: {unique: true}
     },
     password: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     resetPassToken: {
-        type: String,
-        trim: true
+        type: String
     },
     tokenExpiration: {
-        type: Date,
-        trim: true
+        type: Date
     }
 },
 {

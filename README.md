@@ -37,6 +37,7 @@ Report [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
 - Bcrypt
 - Mongoose & MongoDB
 - Connect-Mongo
+- Helmet
 - Nodemailer
 - Handlebars (email templating)
 
