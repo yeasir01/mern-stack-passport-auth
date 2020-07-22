@@ -74,6 +74,7 @@ const SignIn = (props) => {
     if (valid) {
       API.login(formData)
       .then(res => {
+  
         setUser({
           isAuthenticated: res.data.isAuthenticated,
           name: res.data.user,
@@ -156,7 +157,7 @@ const SignIn = (props) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/forgot" variant="body2">
+              <Link to="/forgot-password" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
