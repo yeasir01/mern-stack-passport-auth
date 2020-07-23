@@ -18,7 +18,7 @@ import { validEmail } from '../../utils/ValidationHelpers'
 const ForgotPassword = () => {
   const classes = useStyles();
   const history = useHistory();
-  const alertRef = useRef();
+  const alertCompRef = useRef();
 
   const [formData, setFormData] = useState({
     email: ''
@@ -71,9 +71,9 @@ const ForgotPassword = () => {
         let data = err.response.data;
 
         if ( data ) {
-          alertRef.current.createAlert("error", data.message, true);
+          alertCompRef.current.createAlert("error", data.message, true);
         } else {
-          alertRef.current.createAlert("error", "Oops, something went wrong!", true);
+          alertCompRef.current.createAlert("error", "Oops, something went wrong!", true);
         }
       })
     }
@@ -100,7 +100,7 @@ const ForgotPassword = () => {
         <Typography component="h1" variant="body2" className={classes.text}>
         No worries! Just enter the email you used to register and we'll send you a reset password link.
         </Typography>
-        <Alert ref={alertRef}/>
+        <Alert ref={alertCompRef}/>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.emailError ? true : false}

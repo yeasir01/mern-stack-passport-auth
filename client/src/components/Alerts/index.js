@@ -7,6 +7,7 @@ import useStyles from './style';
 const Alerts = forwardRef((props, ref) => {
   const classes = useStyles();
   const location = useLocation();
+  const animateTime = 250; // in miliseconds
   
   const [alert, setAlert] = useState({
     type: '',
@@ -26,12 +27,19 @@ const Alerts = forwardRef((props, ref) => {
     }
   },[location.alert])
 
-  const createAlert = (error, message, show) => {
-    setAlert({
-      type: error,
-      message: message,
-      show: show
-    })
+  const createAlert = (type, message, show) => {
+    clearAlert();
+    
+    setTimeout(() => {
+      setAlert({
+        type: type,
+        message: message,
+        show: show
+      })
+
+      clearTimeout(this)
+    }, animateTime);
+
   }
 
   const clearAlert = () => {
@@ -44,15 +52,16 @@ const Alerts = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, ()=> {
     return {
-      createAlert: createAlert
+      createAlert: createAlert,
+      clearAlert: clearAlert
     }
   })
 
   //severity options ["error","info","success","warning"]
   return (
     <div className={classes.root} onClick={clearAlert}>
-      <Collapse in={alert.show} timeout={600}>
-        <Alert className={classes.topMargin} severity={alert.type || "info"}>{alert.message}</Alert>
+      <Collapse in={alert.show} timeout={animateTime}>
+        <Alert className={classes.topMargin} severity={alert.type || "info"}>{alert.message || ""}</Alert>
       </Collapse>
     </div>
   );

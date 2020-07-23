@@ -17,7 +17,7 @@ import Alert from '../../components/Alerts';
 const ForgotPassword = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const alertRef = useRef();
+  const alertCompRef = useRef();
 
   const [formData, setFormData] = useState({
     token: props.match.params.token,
@@ -51,9 +51,9 @@ const ForgotPassword = (props) => {
   }
   
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     
-    let valid = validationCheck()
+    let valid = validationCheck();
     
     if (valid) {
       API.resetPassword(formData)
@@ -67,9 +67,9 @@ const ForgotPassword = (props) => {
         let data = err.response.data;
 
         if ( data ) {
-          alertRef.current.createAlert("error", data.message, true);
+          alertCompRef.current.createAlert("error", data.message, true);
         } else {
-          alertRef.current.createAlert("error", "Oops, something went wrong!", true);
+          alertCompRef.current.createAlert("error", "Oops, something went wrong!", true);
         }
       })
     }
@@ -97,7 +97,7 @@ const ForgotPassword = (props) => {
         <Typography component="h1" variant="body2" className={classes.text}>
         Your password must be at least 8 characters long, contain at least one letter and one number.
         </Typography>
-        <Alert ref={alertRef} />
+        <Alert ref={alertCompRef} />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.passwordError ? true : false}

@@ -20,7 +20,7 @@ const SignIn = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
-  const alertRef = useRef();
+  const alertCompRef = useRef();
   
   const { setUser } = useContext(AuthContext);
 
@@ -66,7 +66,7 @@ const SignIn = (props) => {
   
   
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     
     let valid = validationCheck();
     let { from } = location.state || { from: {pathname: "/dashboard"}};
@@ -87,9 +87,9 @@ const SignIn = (props) => {
         let status = err.response.status;
 
         if ( status === 401 ) {
-          alertRef.current.createAlert("error", "Incorrect username or password.", true);
+          alertCompRef.current.createAlert("error", "Incorrect username or password.", true);
         } else {
-          alertRef.current.createAlert("error", "Oops, something went wrong.", true);
+          alertCompRef.current.createAlert("error", "Oops, something went wrong.", true);
         }
       })
     }
@@ -114,7 +114,7 @@ const SignIn = (props) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Alert ref={alertRef} />
+        <Alert ref={alertCompRef} />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             error = {validation.emailError ? true : false}

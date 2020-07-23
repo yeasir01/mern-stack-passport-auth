@@ -18,7 +18,7 @@ import { validEmail, validPassword } from '../../utils/ValidationHelpers'
 const Register = () => {
   const classes = useStyles();
   const history = useHistory();
-  const alertRef = useRef();
+  const alertCompRef = useRef();
 
   const [validation, setvalidation] = useState({
     firstNameError: null,
@@ -75,9 +75,9 @@ const Register = () => {
   }
   
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    let valid = validationCheck()
+    let valid = validationCheck();
     
     if (valid) {
       API.register(formData)
@@ -95,9 +95,9 @@ const Register = () => {
         let data = err.response.data;
 
         if ( data ) {
-          alertRef.current.createAlert("error", data.message, true);
+          alertCompRef.current.createAlert("error", data.message, true);
         } else {
-          alertRef.current.createAlert("error", "Oops, something went wrong!", true);
+          alertCompRef.current.createAlert("error", "Oops, something went wrong!", true);
         }
       })
     }
@@ -124,7 +124,7 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Alert ref={alertRef} />
+        <Alert ref={alertCompRef} />
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

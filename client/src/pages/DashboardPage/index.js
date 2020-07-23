@@ -8,7 +8,7 @@ const Dashboard = () => {
 
     return (
         <div>
-            <h1>Welcome {user.name}!</h1>
+            <h1>Welcome, {user.name}!</h1>
             <h1>ID: {user.id}</h1>
             <button style={{marginRight:"10px"}}>Get Data</button>
             <button onClick={logout}>Logout</button>
