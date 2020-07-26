@@ -12,9 +12,13 @@ const NavBar = () => {
 
   const { user, logout } = useContext(AuthContext);
 
-  const button = (
+  const buttons = (
       user.isAuthenticated ? 
-      <Button onClick={logout} color="inherit">Sign Out</Button> :
+      <div>
+      <Button component={Link} to="/dashboard" color="inherit">Dashboard</Button>
+      <Button onClick={logout} color="inherit">Sign Out</Button>
+      </div>
+       :
       <div>
         <Button component={Link} to="/register" color="inherit">Sign up</Button>
         <Button component={Link} to="/login" color="inherit">Login</Button>
@@ -27,7 +31,7 @@ const NavBar = () => {
           <Typography variant="h6" className={classes.title}>
             MERN AUTH
           </Typography>
-          { button }
+          { buttons }
         </Toolbar>
       </AppBar>
   );
