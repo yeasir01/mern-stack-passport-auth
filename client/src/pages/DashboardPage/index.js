@@ -1,18 +1,15 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '../../utils/AuthContext';
-import Footer from '../../components/Footer';
+import { AuthContext } from '../../context/AuthContext';
 
 const Dashboard = () => {
 
-    const { user, logout } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     return (
         <div>
-            <h1>Welcome, {user.name}!</h1>
-            <h1>ID: {user.id}</h1>
-            <button style={{marginRight:"10px"}}>Get Data</button>
-            <button onClick={logout}>Logout</button>
-            <Footer />
+            <h1>Welcome, {user.name}</h1>
+            <h3>User Id: {user.id}</h3>
+            <p>Your now visiting a password protected page.</p>
         </div>
     )
 }

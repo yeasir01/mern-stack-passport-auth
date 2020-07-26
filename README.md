@@ -1,36 +1,36 @@
 # :closed_lock_with_key: MERN Stack Passport Auth Boilerplate
 
-<img src="./images/mobile_app.gif" width="50%">
-
-<img src="./images/email.png" width="50%">
+![Screen Shot of Project](./screenshots/GIF.gif)
 
 ## About This Project
 
 This is boilerplate code for a MERN stack authentication system using PasspportJS - Local Stratgey. The intent of this project is to create an easy to use, full featured, performant login system.
 
-## Project Goals
-1) Security
-2) Maximum flexibility
-3) Small footprint w/minimal dependencies
-4) Use all modern functional based components & hooks
-5) Modern JS ES6 Syntax
-6) No Redux (use context for state management)
-7) Reduce or eliminate all unnecessary re-renders
+## Features
+* Security
+    * Passwords salt & hashed before storing in DB.
+    * Sessions are time based & stored server side.
+    * HTTP response headers set by Helment middleware to help prevent cross-site scripting attacks and other cross-site injections.
+    * Client side login errors are ambiguous to prevent potential hackers from knowing if they have sucessfully captured a valid username.
+    * Client side session cookie will not set, unless an SSL is established.
+    * Password reset token are time based.
+* Flexible UI
+    * Use Material-UI to build complex app layouts which are mobile response or import your own libary and convert componets into HTML elements.
+    * Material-UI allows you to setup custom themes & modes easily.
+* Use of modern functional based components & hooks
+    * To maintain consistency through the application
+    * Allow you to further reduced the codebase by seperating similure functionailty into custom hooks
+    * Hooks are just plain cool ;-)
+* No Redux (uses Context API instead)
+    * https://redux.js.org/faq/general#when-should-i-use-redux
+* SoC
+    * Server side uses MVC Architecture
+    * Client side code seperated by concern making the app easier to scale, debug & maintain as your project grows.
 
-## What is currently working?
-- User registration
-- Login
-- Redirects to history URL after login
-- Form validation (client & server side)
-- Session cookies w/ttl
-- Forgot password form
-- Password reset form
-- Templated email for password resets
+## Issues
+Found a bug? Report it [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
 
-## Issues?
-Report [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
-
-## Technologies (Server-Side)
+## Server Side Technologies
 - Express
 - Express-Sessions
 - Passport & Passport-Local
@@ -41,7 +41,7 @@ Report [here](https://github.com/yeasir01/mern-stack-passport-auth/issues)
 - Nodemailer
 - Handlebars (email templating)
 
-## Technologies (Client-Side)
+## Client Side Technologies
 - React
 - Material-UI
 - Axios (Improved browser support)
@@ -56,6 +56,26 @@ MONGODB_URI = yourMongoAtlasURLAndPasswordHere
 SESSION_SECRET = yourCustomSuperSecertPassPhraseHere
 EMAIL_USERNAME = yourEmailHere
 EMAIL_PASSWORD = yourEmailPasswordHere
+```
+
+4) Configure setup.json
+
+```
+{
+    "site" : {
+        "URL" : "https://mern-stack-pass-app.herokuapp.com",
+        "appName" : "Awesome App"
+    }, 
+    "auth" : {
+        "sessionTime": 30
+    },
+    "email": {
+        "service": "SendGrid",
+        "fromDisplayName" : "My Awesome App",
+        "logo" : "https://s3.eu-west-2.amazonaws.com/glamcam.media/MyCompanyUS_5a5cee6bd3aed/campaign_assets/logo.png",
+        "tokenTime" : 30
+    }
+}
 ```
 
 Start by installing front and backend dependencies. While in the root directory, run the following command:
@@ -76,4 +96,4 @@ Your app should now be running on <http://localhost:3000>. The Express server <h
 
 ## Deployment (Heroku)
 
-To deploy, simply add and commit your changes then setup your environment variables on the settings page, & push to Heroku. the NPM scripts should take care of the rest.
+To deploy, simply add and commit your changes then setup your environment variables on the settings page, & push to Heroku. The NPM scripts should take care of the rest.

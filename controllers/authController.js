@@ -20,6 +20,7 @@ const validPassword = password => {
 
 module.exports = {
     login: (req, res) => {
+        //Never send the password back to the client
         let { firstName, lastName, id } = req.user;
         res.status(200).json({ success: true, user:`${capitalize(firstName)} ${capitalize(lastName)}`, id: id, isAuthenticated: true });
     },

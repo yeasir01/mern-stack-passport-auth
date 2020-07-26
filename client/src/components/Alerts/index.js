@@ -61,7 +61,7 @@ const Alerts = forwardRef((props, ref) => {
   return (
     <div className={classes.root} onClick={clearAlert}>
       <Collapse in={alert.show} timeout={animateTime}>
-        <Alert className={classes.topMargin} severity={alert.type || "info"}>{alert.message || ""}</Alert>
+        <Alert className={classes.paper} severity={alert.type || "info"}>{alert.message || ""}</Alert>
       </Collapse>
     </div>
   );

@@ -1,22 +1,20 @@
 import React, { useState, useContext, useRef } from 'react';
-import { AuthContext } from '../../utils/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import Links from '@material-ui/core/Link';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './style';
 import Container from '@material-ui/core/Container';
-import Footer from '../../components/Footer';
 import API from '../../utils/API';
 import Alert from '../../components/Alerts';
 import { validEmail, validPassword } from '../../utils/ValidationHelpers';
 
-const SignIn = (props) => {
+const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
@@ -106,7 +104,6 @@ const SignIn = (props) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -157,21 +154,18 @@ const SignIn = (props) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/forgot-password" variant="body2">
+              <Links component={Link} to="/forgot-password" variant="body2">
                 Forgot password?
-              </Link>
+              </Links>
             </Grid>
             <Grid item>
-              <Link to="/register" variant="body2">
+              <Links component={Link} to="/register" variant="body2">
                 {"Don't have an account? Sign Up"}
-              </Link>
+              </Links>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Footer />
-      </Box>
     </Container>
   );
 }

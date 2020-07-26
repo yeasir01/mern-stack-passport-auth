@@ -1,15 +1,14 @@
 {
     "site" : {
         "URL" : "https://mern-stack-pass-app.herokuapp.com",
-        "appName" : "Awsome App"
+        "appName" : "Awesome App"
     }, 
     "auth" : {
         "sessionTime": 30
     },
     "email": {
         "service": "SendGrid",
-        "sender" : "yeasir01@gmail.com",
-        "fromDisplayName" : "Mern Passport Auth App",
+        "fromDisplayName" : "My Awesome App",
         "logo" : "https://s3.eu-west-2.amazonaws.com/glamcam.media/MyCompanyUS_5a5cee6bd3aed/campaign_assets/logo.png",
         "tokenTime" : 30
     }

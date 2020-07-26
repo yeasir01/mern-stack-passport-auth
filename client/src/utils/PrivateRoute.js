@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { AuthContext } from '../utils/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
 import API from './API';
 

@@ -32,7 +32,7 @@ const sendMail = async (options) => {
 
         try {         
             let info = await transporter.sendMail({
-                from: `${setup.email.fromDisplayName} <${setup.email.sender}>`,
+                from: `${setup.email.fromDisplayName} <${process.env.EMAIL_USERNAME}>`,
                 to: await options.email,
                 subject: await renderTemplate(`${options.template}/subject.handlebars`, options),
                 html: await renderTemplate(`${options.template}/html.handlebars`, options)

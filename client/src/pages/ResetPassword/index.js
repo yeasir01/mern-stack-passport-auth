@@ -1,16 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import Links from '@material-ui/core/Link';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './style';
 import Container from '@material-ui/core/Container';
-import Footer from '../../components/Footer';
 import API from '../../utils/API';
 import Alert from '../../components/Alerts';
 
@@ -86,7 +84,6 @@ const ForgotPassword = (props) => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <VpnKeyIcon />
@@ -139,21 +136,18 @@ const ForgotPassword = (props) => {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/" variant="body2">
+              <Links component={Link} to="/" variant="body2">
                 Back to Home Page 
-              </Link>
+              </Links>
             </Grid>
             <Grid item>
-              <Link to="/login" variant="body2">
+              <Links component={Link} to="/login" variant="body2">
               Just Remembered? Login
-              </Link>
+              </Links>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Footer />
-      </Box>
     </Container>
   );
 }
