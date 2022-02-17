@@ -1,4 +1,4 @@
-# :closed_lock_with_key: MERN Stack Passport Auth Boilerplate
+# :closed_lock_with_key: MERN Stack Passport Auth Boilerplate - This project is no longer in active development and will not receive future updates!
 
 ![Screen Shot of Project](./screenshots/GIF.gif)
 
